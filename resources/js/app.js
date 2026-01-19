@@ -29,4 +29,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Start Interval (3500ms)
     setInterval(nextSlide, 3500);
+
+    // Profile Dropdown Toggle Logic
+    // Profile Dropdown Toggle Logic (Auth)
+    const dropdownToggle = document.getElementById('userDropdownToggle');
+    const dropdownMenu = document.getElementById('userDropdownMenu');
+
+    // Guest Dropdown Logic
+    const guestDropdownToggle = document.getElementById('guestDropdownToggle');
+    const guestDropdownMenu = document.getElementById('guestDropdownMenu');
+
+    if (dropdownToggle && dropdownMenu) {
+        dropdownToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('hidden');
+            if(guestDropdownMenu) guestDropdownMenu.classList.add('hidden');
+        });
+    }
+
+    if (guestDropdownToggle && guestDropdownMenu) {
+        guestDropdownToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            guestDropdownMenu.classList.toggle('hidden');
+            if(dropdownMenu) dropdownMenu.classList.add('hidden');
+        });
+    }
+
+    // Global Outside Click
+    document.addEventListener('click', (e) => {
+        if (dropdownToggle && dropdownMenu && !dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+            dropdownMenu.classList.add('hidden');
+        }
+        if (guestDropdownToggle && guestDropdownMenu && !guestDropdownToggle.contains(e.target) && !guestDropdownMenu.contains(e.target)) {
+            guestDropdownMenu.classList.add('hidden');
+        }
+    });
 });

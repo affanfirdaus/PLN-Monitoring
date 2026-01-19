@@ -43,13 +43,78 @@
             </div>
 
             <!-- Right Group: User/Profile (Pushed to right) -->
-            <div class="ml-auto flex items-center gap-3">
-                <div class="flex items-center gap-2 cursor-pointer hover:bg-slate-50 p-2 rounded-lg transition-colors">
-                    <div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 border border-slate-200">
-                        <i class="fas fa-user text-sm"></i>
+            <!-- Right Group: User/Profile (Pushed to right) -->
+            <div class="ml-auto flex items-center gap-3 relative">
+                @guest
+                    <!-- Guest: Login Dropdown (Icon Only) -->
+                    <div id="guestDropdownToggle" class="flex items-center gap-2 cursor-pointer hover:bg-slate-50 p-2 rounded-full transition-colors border border-transparent hover:border-slate-100">
+                        <div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 border border-slate-200 shadow-sm">
+                            <i class="fas fa-user text-sm"></i>
+                        </div>
+                        <i class="fas fa-chevron-down text-xs text-slate-400"></i>
                     </div>
-                    <i class="fas fa-chevron-down text-xs text-slate-400"></i>
-                </div>
+
+                    <!-- Dropdown Menu Guest -->
+                    <div id="guestDropdownMenu" class="hidden absolute top-full right-0 mt-2 w-56 bg-white border border-slate-100 rounded-xl shadow-[0_4px_20px_-5px_rgba(0,0,0,0.1)] p-1 z-50">
+                        <div class="px-4 py-3 border-b border-slate-50">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Akses Akun</p>
+                        </div>
+                        <a href="{{ route('pelanggan.login') }}" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-[#2F5AA8] rounded-lg transition-colors">
+                            <i class="fas fa-users mr-3 text-slate-400"></i> Login Pelanggan
+                        </a>
+                        <a href="{{ route('pegawai.login') }}" class="block px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-[#2F5AA8] rounded-lg transition-colors">
+                            <i class="fas fa-user-tie mr-3 text-slate-400"></i> Login Pegawai
+                        </a>
+                        <div class="border-t border-slate-50 my-1"></div>
+                        <a href="{{ route('pelanggan.register') }}" class="block px-4 py-2.5 text-sm text-[#2F5AA8] hover:bg-blue-50 font-semibold rounded-lg transition-colors">
+                            Daftar Pelanggan
+                        </a>
+                    </div>
+                @else
+                    @if(Auth::user()->role === 'pelanggan')
+                        <!-- Authenticated Pelanggan -->
+                        <div id="userDropdownToggle" class="flex items-center gap-3 cursor-pointer hover:bg-slate-50 p-2 rounded-full transition-colors border border-transparent hover:border-slate-100">
+                            <!-- Name -->
+                            <span class="hidden sm:block text-sm font-semibold text-slate-700">{{ Auth::user()->name }}</span>
+                            
+                            <!-- Avatar -->
+                            <div class="w-9 h-9 rounded-full bg-slate-200 overflow-hidden flex items-center justify-center text-slate-500 border border-slate-200">
+                                @if(Auth::user()->profile_photo)
+                                    <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Avatar" class="w-full h-full object-cover">
+                                @else
+                                    <span class="text-xs font-bold">{{ substr(Auth::user()->name, 0, 2) }}</span>
+                                @endif
+                            </div>
+                            
+                            <!-- Chevron -->
+                            <i class="fas fa-chevron-down text-xs text-slate-400"></i>
+                        </div>
+
+                        <!-- Dropdown Menu -->
+                        <div id="userDropdownMenu" class="hidden absolute top-full right-0 mt-2 w-56 bg-white border border-slate-100 rounded-xl shadow-[0_4px_20px_-5px_rgba(0,0,0,0.1)] p-1 z-50">
+                            <div class="px-4 py-3 border-b border-slate-50">
+                                <p class="text-sm font-bold text-slate-800">{{ Auth::user()->name }}</p>
+                                <p class="text-xs text-slate-500 truncate">{{ Auth::user()->email }}</p>
+                            </div>
+                            <a href="{{ route('pelanggan.profile') }}" class="block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-[#2F5AA8] rounded-lg transition-colors">
+                                <i class="fas fa-user-circle mr-2"></i> Lihat Profil Saya
+                            </a>
+                            <form action="{{ route('pelanggan.logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                                </button>
+                            </form>
+                        </div>
+                    @else
+                        <!-- Authenticated Pegawai or Other Rules - Keep Default/Minimal -->
+                        <div class="flex items-center gap-2 cursor-pointer hover:bg-slate-50 p-2 rounded-lg transition-colors">
+                            <div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 border border-slate-200">
+                                <i class="fas fa-user text-sm"></i>
+                            </div>
+                        </div>
+                    @endif
+                @endguest
             </div>
         </div>
     </header>
@@ -82,16 +147,19 @@
                         </p>
                         
                         <!-- Buttons -->
+                        <!-- Buttons -->
+                        @if(Auth::guest() || Auth::user()->role !== 'pelanggan')
                         <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4">
                             <!-- Login Pegawai (Primary) -->
-                            <a href="/pegawai/login" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-[#2F5AA8] text-white font-semibold text-sm hover:bg-[#274C8E] transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 focus:ring-4 focus:ring-blue-100">
+                            <a href="{{ route('pegawai.login') }}" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-[#2F5AA8] text-white font-semibold text-sm hover:bg-[#274C8E] transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 focus:ring-4 focus:ring-blue-100">
                                 Login Pegawai
                             </a>
                             <!-- Login Pelanggan (Secondary) -->
-                            <a href="/pelanggan/login" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-all shadow-sm hover:border-slate-300 focus:ring-4 focus:ring-slate-100">
+                            <a href="{{ route('pelanggan.login') }}" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-all shadow-sm hover:border-slate-300 focus:ring-4 focus:ring-slate-100">
                                 Login Pelanggan
                             </a>
                         </div>
+                        @endif
                     </div>
 
                     <!-- Right Column: Slider Card -->
