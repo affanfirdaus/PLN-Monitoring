@@ -3,148 +3,215 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PLN - Sistem Monitoring Pasang Baru & Tambah Daya</title>
+    <title>PLN UP3 Kudus - Sistem Monitoring</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="app" id="appRoot">
-        <!-- HEADER / TOPBAR -->
-        <header class="topbar">
-            <div class="topbar-left">
-                <div class="logo-wrapper">
-                    <!-- LOGO FIXED -->
-                    <img src="{{ asset('images/pln-logo.png') }}" alt="PLN Logo" class="logo-pln">
+<body class="font-sans text-slate-800 antialiased bg-white selection:bg-blue-100 selection:text-blue-900">
+
+    <!-- A. TOPBAR (Fixed Header) -->
+    <header class="fixed top-0 inset-x-0 h-20 bg-white border-b border-slate-100 z-50 flex items-center shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)]">
+        <!-- Changed to w-full px-4 for left alignment -->
+        <div class="w-full px-4 md:px-6 flex items-center h-full">
+            
+            <!-- Left Group: Logo + Nav -->
+            <div class="flex items-center gap-8 md:gap-10">
+                <!-- Logo + App Name -->
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-auto">
+                        <img src="{{ asset('images/pln-logo.png') }}" alt="PLN Logo" class="h-full object-contain">
+                    </div>
+                    <div class="flex flex-col leading-none">
+                        <span class="text-blue-900 font-bold text-lg tracking-tight">PLN</span>
+                        <span class="text-yellow-600 font-bold text-base tracking-wide">UP3 KUDUS</span>
+                    </div>
                 </div>
-                <!-- REMOVED EXTRA TEXT "PLN" NEXT TO LOGO to match clean look if needed, kept if user insists, but prompt said "logo pln itu tampilkan gambar... logo-pln.png", assumed replacing the old block or just fixing src. keeping structure clean. -->
-                <div class="brand-pln">PLN</div>
-                <div class="divider-vertical"></div>
-                <h1 class="system-title">Sistem Monitoring <span style="font-weight:400; color:#6B7793;">Pasang Baru & Tambah Daya</span></h1>
+
+                <!-- Navigation Menu (Desktop) -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-[#2F5AA8] font-semibold border-b-2 border-[#2F5AA8] pb-1">Dashboard</a>
+                    <a href="#" class="text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Monitoring</a>
+                    <a href="#" class="text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Pembayaran</a>
+                </nav>
             </div>
 
-            <div class="topbar-right">
-                <div class="lang-switcher">ID | EN</div>
-                <div class="user-avatar">
-                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <!-- Right Group: User/Profile (Pushed to right) -->
+            <div class="ml-auto flex items-center gap-3">
+                <div class="flex items-center gap-2 cursor-pointer hover:bg-slate-50 p-2 rounded-lg transition-colors">
+                    <div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 border border-slate-200">
+                        <i class="fas fa-user text-sm"></i>
+                    </div>
+                    <i class="fas fa-chevron-down text-xs text-slate-400"></i>
                 </div>
-                <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7793" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- SIDEBAR -->
-        <aside class="sidebar" id="sidebar">
-            <nav class="sidebar-nav">
-                <a href="#" class="menu-item active">
-                    <div class="menu-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                    </div>
-                    <span>Dashboard</span>
-                </a>
-
-                <a href="#" class="menu-item">
-                    <div class="menu-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    </div>
-                    <span>Monitoring</span>
-                </a>
-
-                <a href="#" class="menu-item">
-                    <div class="menu-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-                    </div>
-                    <span>Pembayaran</span>
-                </a>
-            </nav>
-
-            <div class="sidebar-footer">
-                <div class="headset-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
-                </div>
-                <span>PLN Contact Center 123</span>
-            </div>
-        </aside>
-
-        <!-- MAIN CONTENT -->
-        <main class="content">
-            <div class="content-bg">
-                
-                <!-- TOMBOL TOGGLE WRAPPER -->
-                <div class="sidebar-toggle-wrapper">
-                    <!-- Close Button (Saat sidebar open) -->
-                    <button id="sidebarClose" class="sidebar-fab sidebar-fab-close" type="button">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                    </button>
-                    <!-- Open Button (Saat sidebar closed) -->
-                    <button id="sidebarOpen" class="sidebar-fab sidebar-fab-open" type="button">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                    </button>
-                </div>
-
-                <!-- LEFT AREA (Welcome + Services) -->
-                <div class="left-section">
-                    <h2 class="welcome-text">Selamat datang, silahkan login</h2>
+    <!-- Main Content Wrapper to prevent content hiding behind fixed header -->
+    <main class="pt-20">
+        
+        <!-- B. HERO SECTION -->
+        <section class="relative w-full overflow-hidden bg-slate-50 border-b border-slate-200 min-h-[360px] bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('images/bg-pln.png') }}');">
+            
+            <!-- White Gradient Overlay for Text Readability -->
+            <div class="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-white/10 z-0 backdrop-blur-[1px]"></div>
+            
+            <!-- Container: max-w-[1400px] + px-4 for left bias -->
+            <div class="max-w-[1400px] mx-auto px-4 md:px-6 py-16 relative z-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
                     
-                    <!-- GLASS CONTAINER: PERMOHONAN LAYANAN -->
-                    <div class="glass-container service-glass-panel">
-                        <h3 class="glass-title service-heading-red">Permohonan pelayanan</h3>
-                        <div class="service-grid">
-                            <!-- Card 1 -->
-                            <div class="service-card large-card">
-                                <div class="service-icon-circle">
-                                     <img src="{{ asset('images/icon-tambah-daya.png') }}" alt="Icon" onerror="this.style.display='none'"> 
-                                </div>
-                                <div class="service-info">
-                                    <div class="s-title">Tambah Daya</div>
-                                    <div class="s-sub">Tambah Daya</div>
+                    <!-- Left: Text Content -->
+                    <div class="flex flex-col items-start text-left space-y-6 max-w-xl">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100/80 border border-blue-200 text-blue-800 text-xs font-bold uppercase tracking-wider backdrop-blur-sm">
+                            <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                            Sistem Monitoring Layanan
+                        </div>
+                        <h1 class="text-4xl md:text-5xl lg:text-5xl font-extrabold text-slate-900 leading-tight">
+                            Layanan Listrik <br>
+                            <span class="text-[#2F5AA8]">Mudah & Cepat</span>
+                        </h1>
+                        <p class="text-lg text-slate-700 font-medium max-w-lg leading-relaxed">
+                            Pantau proses pasang baru dan tambah daya listrik Anda secara realtime, transparan, dan terpercaya di PLN UP3 Kudus.
+                        </p>
+                        
+                        <!-- Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4">
+                            <!-- Login Pegawai (Primary) -->
+                            <a href="/pegawai/login" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-[#2F5AA8] text-white font-semibold text-sm hover:bg-[#274C8E] transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 focus:ring-4 focus:ring-blue-100">
+                                Login Pegawai
+                            </a>
+                            <!-- Login Pelanggan (Secondary) -->
+                            <a href="/pelanggan/login" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-all shadow-sm hover:border-slate-300 focus:ring-4 focus:ring-slate-100">
+                                Login Pelanggan
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Slider Card -->
+                    <div class="w-full max-w-lg ml-auto md:mr-10 relative z-20">
+                        <div class="bg-white/60 backdrop-blur-md rounded-2xl border border-white/60 shadow-lg p-3">
+                            <!-- Slider Window -->
+                            <div class="relative w-full aspect-[16/9] overflow-hidden rounded-xl bg-slate-200">
+                                <!-- Track -->
+                                <div id="heroSlideTrack" class="flex w-full h-full transition-transform duration-700 ease-in-out">
+                                    <!-- Slide 1 -->
+                                    <div class="w-full h-full flex-shrink-0 relative">
+                                        <img src="{{ asset('images/bg-pln.png') }}" class="w-full h-full object-cover" alt="PLN Slide 1">
+                                    </div>
+                                    <!-- Slide 2 -->
+                                    <div class="w-full h-full flex-shrink-0 relative">
+                                        <img src="{{ asset('images/bg-pln.png') }}" class="w-full h-full object-cover" alt="PLN Slide 2">
+                                    </div>
+                                    <!-- Slide 3 -->
+                                    <div class="w-full h-full flex-shrink-0 relative">
+                                        <img src="{{ asset('images/bg-pln.png') }}" class="w-full h-full object-cover" alt="PLN Slide 3">
+                                    </div>
                                 </div>
                             </div>
-                            <!-- Card 2 -->
-                            <div class="service-card large-card">
-                                <div class="service-icon-circle">
-                                     <img src="{{ asset('images/icon-pasang-baru.png') }}" alt="Icon" onerror="this.style.display='none'"> 
-                                </div>
-                                <div class="service-info">
-                                    <div class="s-title">Pasang Baru</div>
-                                    <div class="s-sub">Pasang Baru</div>
-                                </div>
+                            <!-- Dots -->
+                            <div class="flex items-center justify-center gap-2 mt-4 mb-1">
+                                <div class="slide-dot w-6 h-1.5 rounded-full bg-blue-600 transition-all duration-300"></div>
+                                <div class="slide-dot w-1.5 h-1.5 rounded-full bg-slate-300 transition-all duration-300"></div>
+                                <div class="slide-dot w-1.5 h-1.5 rounded-full bg-slate-300 transition-all duration-300"></div>
                             </div>
                         </div>
                     </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- C. SECTION PERMOHONAN LAYANAN -->
+        <section class="bg-white py-20 border-t border-slate-50">
+            <!-- Adjusted container: max-w-[1400px] + px-4 -->
+            <div class="max-w-[1400px] mx-auto px-4 md:px-6">
+                
+                <!-- Section Title -->
+                <div class="mb-10 text-left">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-2">Permohonan Layanan</h2>
+                    <p class="text-slate-500">Pilih jenis layanan kelistrikan yang Anda butuhkan</p>
                 </div>
 
-                <!-- RIGHT AREA (Login Cards) -->
-                <div class="right-section-fixed">
-                    <!-- GLASS CONTAINER: LOGIN -->
-                    <div class="glass-container actor-glass-panel">
-                        <h3 class="glass-title login-heading-orange">Login sebagai apa?</h3>
-                        <div class="login-grid">
-                            <!-- Card Pelanggan -->
-                            <div class="login-card">
-                                <div class="lc-header">Login sebagai Pelanggan</div>
-                                <div class="lc-illustration">
-                                    <img src="{{ asset('images/ill-pelanggan.png') }}" alt="Pelanggan" onerror="this.style.display='none'">
-                                </div>
-                                <a href="/pelanggan/login" class="btn-login btn-blue">Masuk Pelanggan</a>
+                <!-- Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Card 1: Tambah Daya -->
+                    <div class="group bg-white rounded-2xl border border-slate-200 p-8 shadow-sm hover:shadow-xl hover:shadow-blue-900/5 hover:border-blue-100 transition-all duration-300 relative overflow-hidden">
+                        <!-- Hover Decoration -->
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-full -mr-8 -mt-8 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        
+                        <div class="relative z-10 flex flex-col h-full">
+                            <!-- Icon Bubble -->
+                            <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-[#2F5AA8] mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-bolt text-2xl"></i>
                             </div>
                             
-                            <!-- Card Pegawai -->
-                            <div class="login-card">
-                                <div class="lc-header">Login sebagai Pegawai</div>
-                                <div class="lc-illustration">
-                                    <img src="{{ asset('images/ill-pegawai.png') }}" alt="Pegawai" onerror="this.style.display='none'">
-                                </div>
-                                <a href="/pegawai/login" class="btn-login btn-orange">Masuk Pegawai</a>
+                            <!-- Content -->
+                            <div class="flex-grow">
+                                <h3 class="text-xl font-bold text-slate-900 mb-2">Tambah Daya</h3>
+                                <p class="text-slate-500 text-sm leading-relaxed mb-8">
+                                    Layanan untuk mengajukan peningkatan daya listrik di rumah atau tempat usaha Anda agar lebih produktif.
+                                </p>
                             </div>
+
+                            <!-- Button -->
+                            <button class="w-full py-3.5 px-4 bg-[#2F5AA8] text-white rounded-xl font-semibold text-sm hover:bg-[#274C8E] transition-colors shadow-sm flex items-center justify-center gap-2 group-hover:gap-3">
+                                <span>Ajukan Tambah Daya</span>
+                                <i class="fas fa-arrow-right text-xs"></i>
+                            </button>
                         </div>
                     </div>
-                </div>
 
+                    <!-- Card 2: Pasang Baru -->
+                    <div class="group bg-white rounded-2xl border border-slate-200 p-8 shadow-sm hover:shadow-xl hover:shadow-blue-900/5 hover:border-blue-100 transition-all duration-300 relative overflow-hidden">
+                         <!-- Hover Decoration -->
+                         <div class="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full -mr-8 -mt-8 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                        <div class="relative z-10 flex flex-col h-full">
+                            <!-- Icon Bubble -->
+                            <div class="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-600 mb-6 group-hover:scale-110 transition-transform">
+                                <i class="fas fa-home text-2xl"></i>
+                            </div>
+                            
+                            <!-- Content -->
+                            <div class="flex-grow">
+                                <h3 class="text-xl font-bold text-slate-900 mb-2">Pasang Baru</h3>
+                                <p class="text-slate-500 text-sm leading-relaxed mb-8">
+                                    Layanan pemasangan sambungan listrik baru untuk bangunan rumah tinggal atau bisnis dengan mudah.
+                                </p>
+                            </div>
+
+                            <!-- Button -->
+                            <button class="w-full py-3.5 px-4 bg-[#2F5AA8] text-white rounded-xl font-semibold text-sm hover:bg-[#274C8E] transition-colors shadow-sm flex items-center justify-center gap-2 group-hover:gap-3">
+                                <span>Ajukan Pasang Baru</span>
+                                <i class="fas fa-arrow-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-        </main>
-    </div>
+        </section>
+
+    </main>
+
+    <!-- Optional Footer -->
+    <footer class="bg-white border-t border-slate-100 py-8">
+        <div class="container max-w-7xl mx-auto px-6 md:px-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-slate-500 text-sm">
+            <p>&copy; 2026 PT PLN (Persero) UP3 Kudus. All rights reserved.</p>
+            <div class="flex gap-6 mt-4 md:mt-0 font-medium text-slate-400">
+                <a href="#" class="hover:text-slate-600">Privacy Policy</a>
+                <a href="#" class="hover:text-slate-600">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>

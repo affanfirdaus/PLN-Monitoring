@@ -1,27 +1,32 @@
 import "./bootstrap";
 import "../css/app.css";
 
-(function () {
-    const btnClose = document.getElementById('sidebarClose');
-    const btnOpen = document.getElementById('sidebarOpen');
-    
-    // Safety check
-    if (!btnClose || !btnOpen) return;
+// Hero Slider Implementation
+document.addEventListener("DOMContentLoaded", () => {
+    const track = document.getElementById("heroSlideTrack");
+    if (!track) return;
 
-    // Load state
-    const saved = localStorage.getItem('sidebarCollapsed');
-    if (saved === '1') {
-        document.body.classList.add('sidebar-collapsed');
+    let index = 0;
+    const slides = track.children;
+    const totalSlides = slides.length;
+
+    // Auto Slide function
+    function nextSlide() {
+        index = (index + 1) % totalSlides;
+        updateSlide();
     }
 
-    // Handlers
-    btnClose.addEventListener('click', () => {
-        document.body.classList.add('sidebar-collapsed');
-        localStorage.setItem('sidebarCollapsed', '1');
-    });
+    function updateSlide() {
+        track.style.transform = `translateX(-${index * 100}%)`;
+        // Optional: Update dots if we add them later
+        const dots = document.querySelectorAll(".slide-dot");
+        dots.forEach((dot, i) => {
+            if(i === index) dot.classList.add("bg-blue-600", "w-6");
+            else dot.classList.remove("bg-blue-600", "w-6");
+            if(i !== index) dot.classList.add("bg-slate-300");
+        });
+    }
 
-    btnOpen.addEventListener('click', () => {
-        document.body.classList.remove('sidebar-collapsed');
-        localStorage.setItem('sidebarCollapsed', '0');
-    });
-})();
+    // Start Interval (3500ms)
+    setInterval(nextSlide, 3500);
+});
