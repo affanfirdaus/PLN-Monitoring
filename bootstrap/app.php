@@ -11,7 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'login.focus' => \App\Http\Middleware\RequireLoginAndFocus::class,
+            'customer.only' => \App\Http\Middleware\RequireCustomerAuth::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

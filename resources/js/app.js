@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Global Outside Click
+    // Global Outside Click
     document.addEventListener('click', (e) => {
         if (dropdownToggle && dropdownMenu && !dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
             dropdownMenu.classList.add('hidden');
@@ -64,4 +65,52 @@ document.addEventListener("DOMContentLoaded", () => {
             guestDropdownMenu.classList.add('hidden');
         }
     });
+
+    // Need Login Action (Strict Logic using window.__NEED_LOGIN__)
+    if (window.__NEED_LOGIN__ === true) {
+        const loginWrapper = document.getElementById('heroLoginActions');
+        const btnPegawai = document.getElementById('btnLoginPegawai');
+        const btnPelanggan = document.getElementById('btnLoginPelanggan');
+        const toast = document.getElementById('toastLoginRequired');
+
+        // Show toast
+        if (toast) toast.classList.remove('hidden');
+
+        // Scroll and Animate
+        if (loginWrapper) {
+            setTimeout(() => {
+                loginWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                loginWrapper.classList.add('login-focus-ring');
+                
+                if (btnPegawai) btnPegawai.classList.add('shake-x');
+                if (btnPelanggan) btnPelanggan.classList.add('shake-x');
+
+                // Cleanup animation classes
+                setTimeout(() => {
+                    loginWrapper.classList.remove('login-focus-ring');
+                    if (btnPegawai) btnPegawai.classList.remove('shake-x');
+                    if (btnPelanggan) btnPelanggan.classList.remove('shake-x');
+                }, 900);
+            }, 300);
+        }
+
+        // Hide toast automatically
+        if (toast) {
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-10px]');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 3000);
+        }
+    }
+
+    // Scroll to Permohonan (Keep this logic)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('scroll') === 'permohonan') {
+        const permohonanSection = document.getElementById('permohonanLayanan');
+        if (permohonanSection) {
+             setTimeout(() => {
+                permohonanSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+        }
+    }
 });

@@ -36,9 +36,9 @@
 
                 <!-- Navigation Menu (Desktop) -->
                 <nav class="hidden md:flex items-center space-x-8">
-                    <a href="#" class="text-[#2F5AA8] font-semibold border-b-2 border-[#2F5AA8] pb-1">Dashboard</a>
-                    <a href="#" class="text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Monitoring</a>
-                    <a href="#" class="text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Pembayaran</a>
+                    <a href="{{ route('landing') }}" class="text-[#2F5AA8] font-semibold border-b-2 border-[#2F5AA8] pb-1">Dashboard</a>
+                    <a href="{{ route('monitoring') }}" class="text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Monitoring</a>
+                    <a href="{{ route('pembayaran') }}" class="text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Pembayaran</a>
                 </nav>
             </div>
 
@@ -149,13 +149,13 @@
                         <!-- Buttons -->
                         <!-- Buttons -->
                         @if(Auth::guest() || Auth::user()->role !== 'pelanggan')
-                        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4">
+                        <div id="heroLoginActions" class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4">
                             <!-- Login Pegawai (Primary) -->
-                            <a href="{{ route('pegawai.login') }}" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-[#2F5AA8] text-white font-semibold text-sm hover:bg-[#274C8E] transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 focus:ring-4 focus:ring-blue-100">
+                            <a id="btnLoginPegawai" href="{{ route('pegawai.login') }}" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-[#2F5AA8] text-white font-semibold text-sm hover:bg-[#274C8E] transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 focus:ring-4 focus:ring-blue-100">
                                 Login Pegawai
                             </a>
                             <!-- Login Pelanggan (Secondary) -->
-                            <a href="{{ route('pelanggan.login') }}" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-all shadow-sm hover:border-slate-300 focus:ring-4 focus:ring-slate-100">
+                            <a id="btnLoginPelanggan" href="{{ route('pelanggan.login') }}" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-all shadow-sm hover:border-slate-300 focus:ring-4 focus:ring-slate-100">
                                 Login Pelanggan
                             </a>
                         </div>
@@ -197,7 +197,7 @@
         </section>
 
         <!-- C. SECTION PERMOHONAN LAYANAN -->
-        <section class="bg-white py-20 border-t border-slate-50">
+        <section id="permohonanLayanan" class="bg-white py-20 border-t border-slate-50">
             <!-- Adjusted container: max-w-[1400px] + px-4 -->
             <div class="max-w-[1400px] mx-auto px-4 md:px-6">
                 
@@ -230,10 +230,10 @@
                             </div>
 
                             <!-- Button -->
-                            <button class="w-full py-3.5 px-4 bg-[#2F5AA8] text-white rounded-xl font-semibold text-sm hover:bg-[#274C8E] transition-colors shadow-sm flex items-center justify-center gap-2 group-hover:gap-3">
+                            <a href="{{ route('layanan.tambah-daya.info') }}" class="w-full py-3.5 px-4 bg-[#2F5AA8] text-white rounded-xl font-semibold text-sm hover:bg-[#274C8E] transition-colors shadow-sm flex items-center justify-center gap-2 group-hover:gap-3">
                                 <span>Ajukan Tambah Daya</span>
                                 <i class="fas fa-arrow-right text-xs"></i>
-                            </button>
+                            </a>
                         </div>
                     </div>
 
@@ -257,10 +257,10 @@
                             </div>
 
                             <!-- Button -->
-                            <button class="w-full py-3.5 px-4 bg-[#2F5AA8] text-white rounded-xl font-semibold text-sm hover:bg-[#274C8E] transition-colors shadow-sm flex items-center justify-center gap-2 group-hover:gap-3">
+                            <a href="{{ route('layanan.pasang-baru.info') }}" class="w-full py-3.5 px-4 bg-[#2F5AA8] text-white rounded-xl font-semibold text-sm hover:bg-[#274C8E] transition-colors shadow-sm flex items-center justify-center gap-2 group-hover:gap-3">
                                 <span>Ajukan Pasang Baru</span>
                                 <i class="fas fa-arrow-right text-xs"></i>
-                            </button>
+                            </a>
                         </div>
                     </div>
 
@@ -281,5 +281,18 @@
         </div>
     </footer>
 
+    <!-- Toast Container (Default Hidden) -->
+    <div id="toastLoginRequired" class="hidden fixed top-24 right-4 z-50 max-w-sm animate-fade-in-down">
+        <div class="rounded-xl border border-red-100 border-l-4 border-l-red-500 bg-white shadow-xl px-4 py-3 flex gap-3 items-start">
+            <div class="mt-0.5 text-red-500"><i class="fas fa-exclamation-circle"></i></div>
+            <div class="text-sm text-slate-700 font-medium">
+                Login terlebih dahulu untuk mengakses menu ini.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.__NEED_LOGIN__ = {{ request('need_login') == 1 ? 'true' : 'false' }};
+    </script>
 </body>
 </html>

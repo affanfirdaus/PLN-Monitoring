@@ -37,3 +37,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
 // Pegawai dummy route for now
 // Pegawai Login Unit Selection
 Route::get('/pegawai/login', [App\Http\Controllers\PegawaiUnitController::class, 'index'])->name('pegawai.login');
+
+// Monitoring & Pembayaran (Protected)
+Route::middleware(['customer.only'])->group(function () {
+    Route::get('/monitoring', [App\Http\Controllers\MonitoringController::class, 'index'])->name('monitoring');
+    Route::get('/pembayaran', [App\Http\Controllers\PembayaranController::class, 'index'])->name('pembayaran');
+    
+    // Protected Permohonan Forms
+    Route::get('/permohonan/tambah-daya', [App\Http\Controllers\PermohonanController::class, 'tambahDayaForm'])->name('permohonan.tambah-daya');
+    Route::get('/permohonan/pasang-baru', [App\Http\Controllers\PermohonanController::class, 'pasangBaruForm'])->name('permohonan.pasang-baru');
+});
+
+// Public Info Routes for Layanan
+Route::get('/layanan/tambah-daya', [App\Http\Controllers\LayananInfoController::class, 'tambahDaya'])->name('layanan.tambah-daya.info');
+Route::get('/layanan/pasang-baru', [App\Http\Controllers\LayananInfoController::class, 'pasangBaru'])->name('layanan.pasang-baru.info');
