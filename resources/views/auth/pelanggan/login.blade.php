@@ -49,8 +49,11 @@
                         <i class="fas fa-lock text-xs"></i>
                     </span>
                     <input type="password" name="password" id="password" required 
-                           class="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all text-sm @error('password') border-red-500 @enderror"
+                           class="w-full pl-9 pr-12 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none transition-all text-sm @error('password') border-red-500 @enderror"
                            placeholder="******">
+                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-3 flex items-center text-slate-500 hover:text-slate-700 cursor-pointer transition-colors" aria-label="Tampilkan password">
+                        <i class="fas fa-eye"></i>
+                    </button>
                 </div>
                 @error('password')
                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -68,5 +71,24 @@
         </div>
     </div>
 
+    <script>
+        const toggle = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+        const icon = toggle.querySelector('i');
+
+        toggle.addEventListener('click', function () {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            
+            // Toggle Icon FontAwesome
+            if (type === 'password') {
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        });
+    </script>
 </body>
 </html>

@@ -14,14 +14,19 @@ class PembayaranController extends Controller
             return redirect()->route('landing');
         }
 
-        // Check if user has requests/invoices (Placeholder for logic)
-        // $hasRequest = Permohonan::where('pelanggan_id', auth()->id())->exists();
-        $hasRequest = false; 
+        $user = Auth::user();
+        
+        $payments = collect();
+        if ($user->nik) {
+            $payments = \App\Models\Payment::whereHas('serviceRequest', function($q) use ($user) {
+                $q->where('applicant_nik', $user->nik);
+            })->with('serviceRequest.applicant')->latest()->get();
+        }
 
-        if (!$hasRequest) {
+        if ($payments->isEmpty()) {
             return view('pelanggan.pembayaran-empty');
         }
 
-        return view('pelanggan.pembayaran', compact('hasRequest'));
+        return view('pelanggan.pembayaran', compact('payments'));
     }
 }
