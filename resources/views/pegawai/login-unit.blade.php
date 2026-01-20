@@ -23,10 +23,10 @@
                 <!-- Logo -->
                 <a href="{{ route('landing') }}" class="flex items-center gap-3">
                     <div class="h-10 w-auto">
-                        <img src="{{ asset('images/pln-logo.png') }}" alt="PLN Logo" class="h-full object-contain">
+                        <img src="{{ asset('images/pln-logo2.png') }}" alt="PLN Logo" class="h-full object-contain">
                     </div>
                     <div class="flex flex-col leading-none">
-                        <span class="text-blue-900 font-bold text-lg tracking-tight">PLN</span>
+                        <span class="font-bold text-lg tracking-tight" style="color: #0099ff;">PLN</span>
                         <span class="text-yellow-600 font-bold text-base tracking-wide">UP3 KUDUS</span>
                     </div>
                 </a>

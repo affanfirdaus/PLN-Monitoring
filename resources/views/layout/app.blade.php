@@ -19,7 +19,7 @@
                 </svg>
             </button>
 
-            <img class="logo-pln" src="{{ asset('images/pln-logo.png') }}" alt="PLN">
+            <img class="logo-pln" src="{{ asset('images/pln-logo2.png') }}" alt="PLN">
             <div class="brand-pln">PLN</div>
             <div class="system-title">Sistem Monitoring Pasang Baru & Tambah Daya</div>
         </div>
