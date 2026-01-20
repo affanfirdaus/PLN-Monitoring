@@ -43,7 +43,7 @@
 
     <main class="pt-20">
         <!-- Hero Section (Clean) -->
-        <section class="relative w-full overflow-hidden bg-slate-50 border-b border-slate-200 min-h-[360px] bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('images/bg-pln.png') }}');">
+        <section class="relative w-full overflow-hidden bg-slate-50 border-b border-slate-200 min-h-[80vh] bg-cover bg-center bg-no-repeat flex items-center" style="background-image: url('{{ asset('images/Hero-section.png') }}');">
             <!-- Overlay -->
             <div class="absolute inset-0 bg-gradient-to-r from-white/70 via-white/40 to-white/10 z-0 backdrop-blur-[1px]"></div>
             

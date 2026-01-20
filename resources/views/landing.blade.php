@@ -123,7 +123,7 @@
     <main class="pt-20">
         
         <!-- B. HERO SECTION -->
-        <section class="relative w-full overflow-hidden bg-slate-50 border-b border-slate-200 min-h-[360px] bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('images/bg-pln.png') }}');">
+        <section class="relative w-full overflow-hidden bg-slate-50 border-b border-slate-200 min-h-[360px] bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('images/Hero-section.png') }}');">
             
             <!-- White Gradient Overlay for Text Readability -->
             <div class="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-white/10 z-0 backdrop-blur-[1px]"></div>
@@ -171,15 +171,15 @@
                                 <div id="heroSlideTrack" class="flex w-full h-full transition-transform duration-700 ease-in-out">
                                     <!-- Slide 1 -->
                                     <div class="w-full h-full flex-shrink-0 relative">
-                                        <img src="{{ asset('images/bg-pln.png') }}" class="w-full h-full object-cover" alt="PLN Slide 1">
+                                        <img src="{{ asset('images/pln.png') }}" class="w-full h-full object-cover" alt="PLN Slide 1" onerror="this.src='{{ asset('images/pln.png') }}'">
                                     </div>
                                     <!-- Slide 2 -->
                                     <div class="w-full h-full flex-shrink-0 relative">
-                                        <img src="{{ asset('images/bg-pln.png') }}" class="w-full h-full object-cover" alt="PLN Slide 2">
+                                        <img src="{{ asset('images/pln-1.png') }}" class="w-full h-full object-cover" alt="PLN Slide 2" onerror="this.src='{{ asset('images/pln.png') }}'">
                                     </div>
                                     <!-- Slide 3 -->
                                     <div class="w-full h-full flex-shrink-0 relative">
-                                        <img src="{{ asset('images/bg-pln.png') }}" class="w-full h-full object-cover" alt="PLN Slide 3">
+                                        <img src="{{ asset('images/pln-2.png') }}" class="w-full h-full object-cover" alt="PLN Slide 3" onerror="this.src='{{ asset('images/pln.png') }}'">
                                     </div>
                                 </div>
                             </div>
