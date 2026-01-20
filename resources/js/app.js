@@ -114,3 +114,34 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
+
+// Helper for Step 3 Radio Cards
+function syncJenisProdukCard() {
+  const cards = document.querySelectorAll('[data-card="jenis_produk"]');
+  if (!cards.length) return;
+
+  // cari radio checked
+  const checked = document.querySelector('input[name="jenis_produk"]:checked');
+  const checkedVal = checked ? checked.value : null;
+
+  cards.forEach((card) => {
+    const val = card.getAttribute('data-value');
+
+    // reset
+    card.classList.remove('border-[#2F5AA8]', 'ring-2', 'ring-[#2F5AA8]/20', 'bg-[#2F5AA8]/5');
+
+    // set aktif
+    if (checkedVal && val === checkedVal) {
+      card.classList.add('border-[#2F5AA8]', 'ring-2', 'ring-[#2F5AA8]/20', 'bg-[#2F5AA8]/5');
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  syncJenisProdukCard();
+  document.addEventListener('change', (e) => {
+    if (e.target && e.target.matches('input[name="jenis_produk"]')) {
+      syncJenisProdukCard();
+    }
+  });
+});

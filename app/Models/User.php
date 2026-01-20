@@ -25,7 +25,23 @@ class User extends Authenticatable
         'phone',
         'gender',
         'address_text',
+        'nik',
     ];
+
+    public function pelangganProfile()
+    {
+        return $this->hasOne(PelangganProfile::class);
+    }
+
+    public function applicantIdentity()
+    {
+        return $this->hasOne(ApplicantIdentity::class);
+    }
+
+    public function submittedRequests()
+    {
+        return $this->hasMany(ServiceRequest::class, 'submitter_user_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
