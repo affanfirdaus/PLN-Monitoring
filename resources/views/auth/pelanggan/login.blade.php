@@ -16,6 +16,14 @@
 </head>
 <body class="font-sans antialiased bg-slate-50 text-slate-800 min-h-screen flex items-center justify-center">
 
+    <!-- Back Button -->
+    <div class="absolute top-8 left-4 md:left-8 z-20">
+        <a href="{{ route('landing') }}" class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 backdrop-blur border border-white/60 shadow-sm hover:bg-white/90 transition text-slate-700 font-medium text-sm">
+            <i class="fas fa-arrow-left text-xs"></i>
+            Kembali
+        </a>
+    </div>
+
     <div class="w-full max-w-sm bg-white p-8 rounded-2xl shadow-lg border border-slate-100">
         <div class="text-center mb-8">
             <h1 class="text-2xl font-bold text-slate-900">Login</h1>

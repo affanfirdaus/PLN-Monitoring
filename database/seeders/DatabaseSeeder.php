@@ -13,13 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call([
-            DummyPelangganSeeder::class,  // Single source: users + master_pelanggan + master_slo
-            DummyCustomerAccountRequestSeeder::class,
-            
-            // Deprecated - data sudah ada di DummyPelangganSeeder:
-            // MasterPelangganSeeder::class,
-            // MasterSloSeeder::class,
+        // User::factory(10)->create();
+
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
         ]);
+
+        $this->call(DummyPelangganSeeder::class);
+        $this->call(DummyCustomerAccountRequestSeeder::class);
     }
 }
