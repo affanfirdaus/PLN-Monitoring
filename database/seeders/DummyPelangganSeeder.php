@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * SINGLE SOURCE OF TRUTH untuk semua dummy data pelanggan
- * Semua data user, master_pelanggan, dan master_slo ADA DI SINI
+ * SIMPLIFIED VERSION - Hanya field essential
  */
 class DummyPelangganSeeder extends Seeder
 {
@@ -31,7 +31,16 @@ class DummyPelangganSeeder extends Seeder
 
         /*
         |--------------------------------------------------------------------------
-        | DATA FINAL - 5 PELANGGAN
+        | DATA SIMPLIFIED - 5 PELANGGAN (ESSENTIAL FIELDS ONLY)
+        |--------------------------------------------------------------------------
+        | Field yang WAJIB:
+        | - nama_lengkap, nik, no_kk, npwp, email, password
+        | - id_pelanggan, no_meter
+        | - slo_reg, slo_cert, slo_lembaga
+        |
+        | Field yang DIHAPUS (tidak perlu di dummy):
+        | - alamat (provinsi, kab_kota, kecamatan, kelurahan, rt, rw, alamat_detail)
+        | - no_hp
         |--------------------------------------------------------------------------
         */
         $pelanggan = [
@@ -42,21 +51,11 @@ class DummyPelangganSeeder extends Seeder
                 'nik' => '3319010101010001',
                 'password' => 'Password123!',
                 
-                // MASTER PELANGGAN PLN
+                // MASTER PELANGGAN PLN (Essential Only)
                 'id_pelanggan' => '512345678901',
                 'no_meter' => '12345678901',
-                'no_hp' => '081234567801',
                 'no_kk' => '3319010101010001',
-                'npwp' => '1234567890123456', // 16 digits (new format)
-                
-                // Alamat Instalasi
-                'provinsi' => 'Jawa Tengah',
-                'kab_kota' => 'Kudus',
-                'kecamatan' => 'Kota',
-                'kelurahan' => 'Mlati Lor',
-                'rt' => '008',
-                'rw' => '012',
-                'alamat_detail' => 'Jl. Jenderal Sudirman No. 12, Perumahan Melati Asri',
+                'npwp' => '1234567890123456',
                 
                 // SLO
                 'slo_reg' => 'SLO-REG-2026-000241',
@@ -71,17 +70,8 @@ class DummyPelangganSeeder extends Seeder
                 
                 'id_pelanggan' => '512345678902',
                 'no_meter' => '12345678902',
-                'no_hp' => '081234567802',
                 'no_kk' => '3319010101010002',
-                'npwp' => '2345678901234567', // 16 digits (new format)
-                
-                'provinsi' => 'Jawa Tengah',
-                'kab_kota' => 'Kudus',
-                'kecamatan' => 'Kota',
-                'kelurahan' => 'Kauman',
-                'rt' => '009',
-                'rw' => '011',
-                'alamat_detail' => 'Jl. Sunan Kudus No. 7, Gang Masjid No. 3',
+                'npwp' => '2345678901234567',
                 
                 'slo_reg' => 'SLO-REG-2026-000242',
                 'slo_cert' => 'SLO-CERT-2026-KUDUS-12002',
@@ -95,17 +85,8 @@ class DummyPelangganSeeder extends Seeder
                 
                 'id_pelanggan' => '512345678903',
                 'no_meter' => '12345678903',
-                'no_hp' => '081234567803',
                 'no_kk' => '3319010101010003',
-                'npwp' => '3456789012345672', // 16 digits (new format) - Updated
-                
-                'provinsi' => 'Jawa Tengah',
-                'kab_kota' => 'Kudus',
-                'kecamatan' => 'Kota',
-                'kelurahan' => 'Rendeng',
-                'rt' => '003',
-                'rw' => '004',
-                'alamat_detail' => 'Jl. Ahmad Yani No. 25',
+                'npwp' => '3456789012345672',
                 
                 'slo_reg' => 'SLO-REG-2025-913402',
                 'slo_cert' => 'SLO-CERT-2025-BOGOR-00019',
@@ -119,17 +100,8 @@ class DummyPelangganSeeder extends Seeder
                 
                 'id_pelanggan' => '512345678904',
                 'no_meter' => '12345678904',
-                'no_hp' => '081234567804',
                 'no_kk' => '3319010101010004',
-                'npwp' => '4567890123456789', // 16 digits (new format)
-                
-                'provinsi' => 'Jawa Tengah',
-                'kab_kota' => 'Kudus',
-                'kecamatan' => 'Kota',
-                'kelurahan' => 'Demaan',
-                'rt' => '006',
-                'rw' => '007',
-                'alamat_detail' => 'Jl. Diponegoro No. 5, Komplek Diponegoro Residence',
+                'npwp' => '4567890123456789',
                 
                 'slo_reg' => 'SLO-REG-2024-450110',
                 'slo_cert' => 'SLO-CERT-2024-SIANT-54321',
@@ -143,17 +115,8 @@ class DummyPelangganSeeder extends Seeder
                 
                 'id_pelanggan' => '512345678905',
                 'no_meter' => '12345678905',
-                'no_hp' => '081234567805',
                 'no_kk' => '3319010101010005',
-                'npwp' => '5678901234567890', // 16 digits (new format)
-                
-                'provinsi' => 'Jawa Tengah',
-                'kab_kota' => 'Kudus',
-                'kecamatan' => 'Mejobo',
-                'kelurahan' => 'Kesambi',
-                'rt' => '010',
-                'rw' => '008',
-                'alamat_detail' => 'Jl. Raya Mejobo Km. 2 No. 18',
+                'npwp' => '5678901234567890',
                 
                 'slo_reg' => 'SLO-REG-2023-777001',
                 'slo_cert' => 'SLO-CERT-2023-KUDUS-10010',
@@ -171,23 +134,19 @@ class DummyPelangganSeeder extends Seeder
                 'password' => Hash::make($p['password']),
             ]);
 
-            // 2. CREATE MASTER PELANGGAN
+            // 2. CREATE MASTER PELANGGAN (Essential fields only)
             DB::table('master_pelanggan')->insert([
-                'nama_lengkap' => strtoupper($p['name']), // Uppercase untuk konsistensi
+                'nama_lengkap' => strtoupper($p['name']),
                 'nik' => $p['nik'],
                 'id_pelanggan_12' => $p['id_pelanggan'],
                 'no_meter' => $p['no_meter'],
-                'no_hp' => $p['no_hp'],
                 'no_kk' => $p['no_kk'],
                 'npwp' => $p['npwp'],
                 
-                'provinsi' => $p['provinsi'],
-                'kab_kota' => $p['kab_kota'],
-                'kecamatan' => $p['kecamatan'],
-                'kelurahan' => $p['kelurahan'],
-                'rt' => $p['rt'],
-                'rw' => $p['rw'],
-                'alamat_detail' => $p['alamat_detail'],
+                // REMOVED FIELDS (not needed for dummy data):
+                // - no_hp
+                // - provinsi, kab_kota, kecamatan, kelurahan
+                // - rt, rw, alamat_detail
                 
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -199,12 +158,13 @@ class DummyPelangganSeeder extends Seeder
                 'no_sertifikat_slo' => $p['slo_cert'],
                 'nama_lembaga' => $p['slo_lembaga'],
                 'nik_pemilik' => $p['nik'],
-                'nama_pemilik' => strtoupper($p['name']), // Uppercase untuk konsistensi
+                'nama_pemilik' => strtoupper($p['name']),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
 
-        $this->command->info('✓ Created 5 pelanggan with consistent data across users, master_pelanggan, and master_slo');
+        $this->command->info('✓ Created 5 pelanggan with SIMPLIFIED essential data only');
+        $this->command->warn('⚠ Alamat & No HP fields are NOT seeded (intentionally empty for dummy data)');
     }
 }
