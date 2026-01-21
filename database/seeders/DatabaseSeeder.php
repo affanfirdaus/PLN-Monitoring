@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(DummyPelangganSeeder::class);
         $this->call(DummyCustomerAccountRequestSeeder::class);
+        $this->call(DummyUsersSeeder::class);
     }
 }
