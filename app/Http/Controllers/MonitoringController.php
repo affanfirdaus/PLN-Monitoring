@@ -9,35 +9,25 @@ class MonitoringController extends Controller
 {
     public function index()
     {
-        // Ensure user is 'pelanggan'
         if (Auth::user()->role !== 'pelanggan') {
             return redirect()->route('landing');
         }
 
-        $user = Auth::user();
-
-        // 1. Permohonan Saya (Where I am the Applicant)
-        // If user has no NIK, this list is empty.
-        $myRequests = collect();
-        if ($user->nik) {
-            $myRequests = \App\Models\ServiceRequest::with(['applicant', 'submitter'])
-                ->where('applicant_nik', $user->nik)
-                ->latest()
-                ->get();
-        }
-
-        // 2. Permohonan yang Saya Ajukan (Where i am the submitter)
-        $submittedRequests = \App\Models\ServiceRequest::with(['applicant'])
-            ->where('submitter_user_id', $user->id)
-            ->latest()
+        // Fetch all requests where user is submitter (covers draft and submitted)
+        $requests = \App\Models\ServiceRequest::with(['applicant'])
+            ->where('submitter_user_id', Auth::id())
+            ->latest('updated_at')
             ->get();
 
-        $hasRequest = $myRequests->isNotEmpty() || $submittedRequests->isNotEmpty();
+        return view('pelanggan.monitoring', compact('requests'));
+    }
 
-        if (!$hasRequest) {
-            return view('pelanggan.monitoring-empty');
-        }
+    public function show($id)
+    {
+        $req = \App\Models\ServiceRequest::with(['applicant'])
+            ->where('submitter_user_id', Auth::id())
+            ->findOrFail($id);
 
-        return view('pelanggan.monitoring', compact('myRequests', 'submittedRequests'));
+        return view('pelanggan.monitoring.show', compact('req'));
     }
 }

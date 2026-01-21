@@ -28,7 +28,119 @@ class TambahDayaController extends Controller
             'submitter_user_id' => null,
             'lokasi' => [],
             'layanan' => [],
+            'service_request_id' => null, // Track DB ID
         ]);
+    }
+
+    /**
+     * RESUME DRAFT
+     */
+    public function resume($id)
+    {
+        $sr = ServiceRequest::where('id', $id)
+            ->where('submitter_user_id', Auth::id())
+            ->where('status', 'DRAFT')
+            ->firstOrFail();
+
+        // Load payload to session
+        if ($sr->payload_json) {
+            Session::put('tambah_daya', $sr->payload_json);
+        } else {
+             // Fallback if payload empty but record exists
+            $wizard = $this->getWizardSession();
+            $wizard['service_request_id'] = $sr->id;
+            Session::put('tambah_daya', $wizard);
+        }
+
+        // Determinta target step
+        $step = $sr->current_step ?? 1;
+        
+        return redirect()->route('tambah-daya.step' . $step);
+    }
+
+    /**
+     * CANCEL / DELETE DRAFT
+     */
+    public function cancel($id)
+    {
+        $sr = ServiceRequest::where('id', $id)
+            ->where('submitter_user_id', Auth::id())
+            ->where('status', 'DRAFT')
+            ->firstOrFail();
+
+        $sr->delete();
+        Session::forget('tambah_daya');
+
+        return redirect()->route('monitoring')->with('success', 'Permohonan berhasil dibatalkan dan dihapus.');
+    }
+
+    /**
+     * AUTOSAVE ENDPOINT
+     */
+    public function autosave(Request $request, $id)
+    {
+        $sr = ServiceRequest::where('id', $id)
+            ->where('submitter_user_id', Auth::id())
+            ->where('status', 'DRAFT')
+            ->first();
+
+        if (!$sr) {
+            return response()->json(['status' => 'error', 'message' => 'Draft not found'], 404);
+        }
+
+        $payload = $request->input('payload');
+        // If payload sent from FE, use it. Else use Session.
+        if (!$payload) {
+            $payload = Session::get('tambah_daya');
+        }
+
+        $sr->update([
+            'payload_json' => $payload,
+            'last_saved_at' => now(),
+        ]);
+
+        return response()->json(['status' => 'saved', 'time' => now()]);
+    }
+
+    /**
+     * INTERNAL DRAFT CREATION / UPDATE
+     */
+    private function updateDraft($wizard)
+    {
+        $user = Auth::user();
+        if (empty($wizard['service_request_id'])) {
+            // CREATE NEW DRAFT
+            $draftNumber = 'DRF-' . date('Ymd') . '-' . strtoupper(\Illuminate\Support\Str::random(6));
+            
+            $sr = ServiceRequest::create([
+                'submitter_user_id' => $user->id,
+                'jenis_layanan' => 'TAMBAH_DAYA',
+                'status' => 'DRAFT',
+                'draft_number' => $draftNumber,
+                'current_step' => $wizard['current_step'] ?? 1,
+                'payload_json' => $wizard,
+                'last_saved_at' => now(),
+                // Nullable fields
+                'daya_baru' => null,
+                'applicant_id' => null, // Will be linked later
+                'applicant_nik' => $wizard['applicant_nik'] ?? 'TEMP',
+            ]);
+
+            $wizard['service_request_id'] = $sr->id;
+            Session::put('tambah_daya', $wizard);
+        } else {
+            // UPDATE EXISTING
+            $sr = ServiceRequest::find($wizard['service_request_id']);
+            if ($sr && $sr->status === 'DRAFT') {
+                $sr->update([
+                    'payload_json' => $wizard,
+                    'current_step' => $wizard['current_step'],
+                    'last_saved_at' => now(),
+                    // Update key fields if available
+                    'applicant_nik' => $wizard['applicant_nik'] ?? $sr->applicant_nik,
+                ]);
+            }
+        }
     }
 
     /**
@@ -64,6 +176,10 @@ class TambahDayaController extends Controller
 
         // Pass session ready status
         $isStep1Ready = session('td_step1.ready', false);
+        
+        // Ensure Draft Exists immediately upon entering Step 1
+        $this->updateDraft($wizard);
+        $wizard = Session::get('tambah_daya');
 
         return view('pelanggan.tambah-daya.step1', compact('wizard', 'user', 'userProfile', 'wajibNPWP', 'isStep1Ready'));
     }
@@ -81,7 +197,8 @@ class TambahDayaController extends Controller
         // Map td_step1 session to main wizard session
         // Priority: Verified data > Session Data > Auth
         $wizard['for_whom'] = $sessionData['mode'];
-        $wizard['applicant_nik'] = $sessionData['owner_nik']; 
+        $wizard['applicant_nik'] = $sessionData['owner_nik'] ?? $sessionData['verified_nik']; // verified_nik is from checkNik 
+        // Fix: logic checkNik sets 'verified_nik'
         $wizard['applicant_name'] = $sessionData['verified_name'] ?? $sessionData['owner_name'] ?? Auth::user()->name;
         $wizard['applicant_identity_id'] = $sessionData['applicant_identity_id'] ?? null;
         
@@ -94,7 +211,10 @@ class TambahDayaController extends Controller
         if ($wizard['current_step'] < 2) {
             $wizard['current_step'] = 2;
         }
+        
+        // Persist DB
         Session::put('tambah_daya', $wizard);
+        $this->updateDraft($wizard); // create/update draft
 
         return redirect()->route('tambah-daya.step2');
     }
@@ -176,6 +296,20 @@ class TambahDayaController extends Controller
             $wizard['current_step'] = 3;
         }
         Session::put('tambah_daya', $wizard);
+        
+        // Persistence
+        $this->updateDraft($wizard);
+        ServiceRequest::where('id', $wizard['service_request_id'])->update([
+            'lokasi_provinsi' => $wizard['lokasi']['provinsi'],
+            'lokasi_kab_kota' => $wizard['lokasi']['kab_kota'],
+            'lokasi_kecamatan' => $wizard['lokasi']['kecamatan'],
+            'lokasi_kelurahan' => $wizard['lokasi']['kelurahan'],
+            'lokasi_rt' => $wizard['lokasi']['rt'],
+            'lokasi_rw' => $wizard['lokasi']['rw'],
+            'lokasi_detail_tambahan' => $wizard['lokasi']['alamat_detail'] ?? null,
+            'koordinat_lat' => $lat,
+            'koordinat_lng' => $lng,
+        ]);
 
         return redirect()->route('tambah-daya.step3');
     }
@@ -234,41 +368,22 @@ class TambahDayaController extends Controller
         $applicantIdentityId = $identity->id;
 
         // Create Service Request
-        $serviceRequest = ServiceRequest::create([
-            'jenis_layanan' => 'TAMBAH_DAYA',
-            'status' => 'DRAFT',
-            'submitter_user_id' => Auth::id(),
-            'applicant_id' => $applicantIdentityId, // Points to applicant_identities matches hard check
-            'applicant_nik' => $applicantNik,
-            
-            // Lokasi
-            'lokasi_provinsi' => $wizard['lokasi']['provinsi'],
-            'lokasi_kab_kota' => $wizard['lokasi']['kab_kota'],
-            'lokasi_kecamatan' => $wizard['lokasi']['kecamatan'],
-            'lokasi_kelurahan' => $wizard['lokasi']['kelurahan'],
-            'lokasi_rt' => $wizard['lokasi']['rt'],
-            'lokasi_rw' => $wizard['lokasi']['rw'],
-            'lokasi_detail_tambahan' => $wizard['lokasi']['alamat_detail'] ?? null,
-            'koordinat_lat' => $wizard['lokasi']['lat'],
-            'koordinat_lng' => $wizard['lokasi']['lng'],
+        // Update Session
+        $wizard['applicant_identity_id'] = $applicantIdentityId;
+        $wizard['completed'][3] = true;
+        $wizard['current_step'] = 4;
+        Session::put('tambah_daya', $wizard);
+        
+        // Persistence
+        $this->updateDraft($wizard);
 
-            // Layanan
+        ServiceRequest::where('id', $wizard['service_request_id'])->update([
+            'applicant_id' => $applicantIdentityId,
+            'applicant_nik' => $applicantNik,
             'daya_baru' => $request->daya_baru,
             'jenis_produk' => $request->jenis_produk,
             'peruntukan_koneksi' => $request->peruntukan_koneksi,
         ]);
-
-        // Generate No Permohonan (Simple format for now: REQ-YYYYMMDD-ID)
-        $serviceRequest->update([
-            'nomor_permohonan' => 'REQ-' . date('Ymd') . '-' . str_pad($serviceRequest->id, 5, '0', STR_PAD_LEFT)
-        ]);
-
-        // Update Session
-        $wizard['completed'][3] = true;
-        $wizard['current_step'] = 4;
-        $wizard['service_request_id'] = $serviceRequest->id;
-        $wizard['applicant_identity_id'] = $applicantIdentityId; // Update session just in case
-        Session::put('tambah_daya', $wizard);
 
         // Redirect to Step 4
         return redirect()->route('tambah-daya.step4');
@@ -403,6 +518,7 @@ class TambahDayaController extends Controller
         $wizard['completed'][4] = true;
         $wizard['current_step'] = 5; 
         Session::put('tambah_daya', $wizard);
+        $this->updateDraft($wizard);
 
         return redirect()->route('tambah-daya.step5');
     }
@@ -686,9 +802,14 @@ class TambahDayaController extends Controller
          if (!empty($wizard['service_request_id'])) {
             $sr = ServiceRequest::find($wizard['service_request_id']);
             if ($sr) {
+                // Generate Official ID
+                $nomorPermohonan = 'REQ-' . date('Ymd') . '-' . str_pad($sr->id, 5, '0', STR_PAD_LEFT);
                 $sr->update([
-                    'applicant_id' => $applicant->id, // Ensure linked
-                    'status' => 'SUBMITTED', // Finalize
+                    'applicant_id' => $applicant->id, 
+                    'status' => 'SUBMITTED', 
+                    'nomor_permohonan' => $nomorPermohonan,
+                    'submitted_at' => now(),
+                    'payload_json' => null, // Optional: Clear draft payload
                 ]);
             }
         }

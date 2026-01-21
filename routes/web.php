@@ -17,6 +17,17 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::get('/register', [PelangganAuthController::class, 'showRegister'])->name('register');
         Route::post('/register', [PelangganAuthController::class, 'register'])->name('register.submit'); // Explicit name
         Route::get('/register/success', [PelangganAuthController::class, 'showRegisterPending'])->name('register.pending');
+
+        // Forgot Password
+        Route::get('/lupa-password', [App\Http\Controllers\Auth\ForgotPasswordRequestController::class, 'show'])->name('forgot-password');
+        Route::middleware('throttle:3,10')->post('/lupa-password', [App\Http\Controllers\Auth\ForgotPasswordRequestController::class, 'store'])->name('forgot-password.store');
+        
+        // Verifications (Rate Limit: 10 per minute)
+        Route::middleware('throttle:10,1')->group(function() {
+            Route::post('/lupa-password/verify-email', [App\Http\Controllers\Auth\ForgotPasswordRequestController::class, 'verifyEmail'])->name('forgot-password.verify-email');
+            Route::post('/lupa-password/verify-nik', [App\Http\Controllers\Auth\ForgotPasswordRequestController::class, 'verifyNik'])->name('forgot-password.verify-nik');
+            Route::post('/lupa-password/verify-nama', [App\Http\Controllers\Auth\ForgotPasswordRequestController::class, 'verifyNama'])->name('forgot-password.verify-nama');
+        });
     });
 
     Route::middleware(['auth', CheckRole::class . ':pelanggan'])->group(function () {
@@ -34,6 +45,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/permintaan-akun-pelanggan/{id}', [App\Http\Controllers\Admin\CustomerRequestController::class, 'show'])->name('requests.show');
     Route::post('/permintaan-akun-pelanggan/{id}/approve', [App\Http\Controllers\Admin\CustomerRequestController::class, 'approve'])->name('requests.approve');
     Route::post('/permintaan-akun-pelanggan/{id}/reject', [App\Http\Controllers\Admin\CustomerRequestController::class, 'reject'])->name('requests.reject');
+
+    // Password Reset Requests
+    Route::get('/password-reset-requests', [App\Http\Controllers\Auth\ForgotPasswordRequestController::class, 'indexAdmin'])->name('password-reset-requests.index');
+    Route::post('/password-reset-requests/{id}/approve', [App\Http\Controllers\Auth\ForgotPasswordRequestController::class, 'approve'])->name('password-reset-requests.approve');
+    Route::post('/password-reset-requests/{id}/reject', [App\Http\Controllers\Auth\ForgotPasswordRequestController::class, 'reject'])->name('password-reset-requests.reject');
 });
 
 // Pegawai dummy route for now
@@ -43,11 +59,17 @@ Route::get('/pegawai/login', [App\Http\Controllers\PegawaiUnitController::class,
 // Monitoring & Pembayaran (Protected)
 Route::middleware(['customer.only'])->group(function () {
     Route::get('/monitoring', [App\Http\Controllers\MonitoringController::class, 'index'])->name('monitoring');
+    Route::get('/monitoring/{id}', [App\Http\Controllers\MonitoringController::class, 'show'])->name('monitoring.show');
     Route::get('/pembayaran', [App\Http\Controllers\PembayaranController::class, 'index'])->name('pembayaran');
     
     // Protected Permohonan Forms - Wizard Tambah Daya
-    Route::get('/pelanggan/tambah-daya', [TambahDayaController::class, 'step1'])->name('tambah-daya.step1');
+    Route::get('/pelanggan/tambah-daya/step-1', [TambahDayaController::class, 'step1'])->name('tambah-daya.step1');
     Route::post('/pelanggan/tambah-daya/step-1', [TambahDayaController::class, 'storeStep1'])->name('tambah-daya.step1.store');
+    
+    // Draft functionality
+    Route::post('/pelanggan/permohonan/{id}/autosave', [TambahDayaController::class, 'autosave'])->name('tambah-daya.autosave');
+    Route::get('/pelanggan/permohonan/{id}/resume', [TambahDayaController::class, 'resume'])->name('tambah-daya.resume');
+    Route::delete('/pelanggan/permohonan/{id}/cancel', [TambahDayaController::class, 'cancel'])->name('tambah-daya.cancel');
     
     Route::get('/pelanggan/tambah-daya/step-2', [TambahDayaController::class, 'step2'])->name('tambah-daya.step2');
     Route::post('/pelanggan/tambah-daya/step-2', [TambahDayaController::class, 'storeStep2'])->name('tambah-daya.step2.store');

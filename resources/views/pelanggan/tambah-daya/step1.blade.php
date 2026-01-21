@@ -130,14 +130,26 @@
 
                 <!-- Navigation Buttons -->
                 <div class="mt-10 flex justify-between pt-6 border-t border-slate-100">
-                    <a href="{{ route('monitoring') }}" class="px-6 py-3 text-slate-500 font-semibold hover:text-slate-800 transition">
-                        Batal
-                    </a>
+                    @if(!empty($wizard['service_request_id']))
+                        <button type="button" onclick="if(confirm('Yakin ingin membatalkan dan menghapus draft permohonan ini?')) document.getElementById('cancel-draft-form').submit();" class="px-6 py-3 text-red-500 font-semibold hover:text-red-700 transition">
+                            Batalkan Pengisian
+                        </button>
+                    @else
+                        <a href="{{ route('monitoring') }}" class="px-6 py-3 text-slate-500 font-semibold hover:text-slate-800 transition">
+                            Batal
+                        </a>
+                    @endif
                     <button type="submit" id="btn-next" disabled class="px-8 py-3 bg-slate-300 text-white font-bold rounded-xl cursor-not-allowed transition shadow-none">
                         Lanjutkan <i class="fas fa-arrow-right ml-2"></i>
                     </button>
                 </div>
             </form>
+            
+            @if(!empty($wizard['service_request_id']))
+            <form id="cancel-draft-form" action="{{ route('tambah-daya.cancel', $wizard['service_request_id']) }}" method="POST" class="hidden">
+                @csrf @method('DELETE')
+            </form>
+            @endif
         </div>
     </div>
 </div>

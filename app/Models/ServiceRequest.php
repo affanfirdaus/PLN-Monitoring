@@ -11,6 +11,12 @@ class ServiceRequest extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'payload_json' => 'array',
+        'last_saved_at' => 'datetime',
+        'submitted_at' => 'datetime',
+    ];
+
     public function applicant()
     {
         return $this->belongsTo(ApplicantIdentity::class, 'applicant_id');

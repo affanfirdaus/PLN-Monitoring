@@ -72,6 +72,13 @@
             <button type="submit" class="w-full py-3 px-4 bg-[#2F5AA8] text-white font-semibold rounded-xl hover:bg-[#274C8E] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 text-sm">
                 Login
             </button>
+
+            <!-- Forgot Password -->
+            <div class="text-center mt-3">
+                <a href="{{ route('pelanggan.forgot-password') }}" class="text-sm text-[#2F5AA8] hover:underline font-medium">
+                    Lupa password?
+                </a>
+            </div>
         </form>
 
         <div class="mt-6 text-center text-sm text-slate-500">

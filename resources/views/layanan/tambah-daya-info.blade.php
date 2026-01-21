@@ -78,7 +78,8 @@
             @else
                 <!-- Logged In User CTA -->
                 <p class="text-slate-600 text-sm hidden md:block">Akun Anda siap. Silakan lanjut ke formulir.</p>
-                <a href="{{ route('permohonan.tambah-daya') }}" 
+                <a id="btn-lanjutkan"
+                   href="{{ route('tambah-daya.step1') }}" 
                    class="whitespace-nowrap px-8 py-3 bg-[#2F5AA8] text-white font-bold rounded-xl hover:bg-[#274C8E] transition shadow-lg shadow-blue-900/20 w-full md:w-auto text-center flex items-center justify-center gap-2">
                     Lanjutkan Permohonan <i class="fas fa-arrow-right"></i>
                 </a>
@@ -86,4 +87,28 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('btn-lanjutkan');
+  if (!btn) return;
+
+  let locked = false;
+
+  btn.addEventListener('click', (e) => {
+    if (locked) {
+      e.preventDefault();
+      return;
+    }
+    locked = true;
+
+    // Kasih feedback biar user ngerasa langsung jalan
+    btn.style.opacity = '0.6';
+    btn.style.pointerEvents = 'none';
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memuat...';
+
+    // Anchor akan jalan normal (href)
+  }, { capture: true });
+});
+</script>
 @endsection
