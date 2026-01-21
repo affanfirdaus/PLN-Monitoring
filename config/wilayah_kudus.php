@@ -100,7 +100,7 @@ return [
         'Sidorekso',
     ],
 
-    'Kudus' => [
+    'Kudus Kota' => [
         // Desa
         'Barongan',
         'Burikan',
@@ -114,6 +114,7 @@ return [
         'Krandon',
         'Langgardalem',
         'Mlati Lor',
+        'Mlati Kidul',
         'Nganguk',
         'Rendeng',
         'Singocandi',

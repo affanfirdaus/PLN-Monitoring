@@ -32,17 +32,21 @@
                     <!-- Provinsi (Fixed) -->
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-2">Provinsi</label>
-                        <select name="provinsi" class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-slate-100 text-slate-600 focus:outline-none pointer-events-none appearance-none">
-                            <option value="Jawa Tengah" selected>Jawa Tengah</option>
+                        <select name="provinsi" class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-600 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-[#2F5AA8] transition">
+                            <option value="" disabled {{ old('provinsi', $prefill['provinsi'] ?? '') ? '' : 'selected' }}>Pilih Provinsi</option>
+                            <option value="Jawa Tengah" {{ old('provinsi', $prefill['provinsi'] ?? '') == 'Jawa Tengah' ? 'selected' : '' }}>Jawa Tengah</option>
                         </select>
+                        @error('provinsi') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <!-- Kab/Kota (Fixed) -->
                     <div>
                         <label class="block text-sm font-bold text-slate-700 mb-2">Kabupaten/Kota</label>
-                        <select name="kab_kota" class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-slate-100 text-slate-600 focus:outline-none pointer-events-none appearance-none">
-                            <option value="Kudus" selected>Kudus</option>
+                        <select name="kab_kota" class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-600 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-[#2F5AA8] transition">
+                            <option value="" disabled {{ old('kab_kota', $prefill['kab_kota'] ?? '') ? '' : 'selected' }}>Pilih Kabupaten/Kota</option>
+                            <option value="Kudus" {{ old('kab_kota', $prefill['kab_kota'] ?? '') == 'Kudus' ? 'selected' : '' }}>Kudus</option>
                         </select>
+                        @error('kab_kota') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <!-- Kecamatan -->
@@ -71,12 +75,18 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">RT</label>
-                            <input type="text" name="rt" value="{{ old('rt', $prefill['rt'] ?? '') }}" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-100 focus:border-[#2F5AA8] outline-none transition">
+                            <input type="text" name="rt" value="{{ old('rt', $prefill['rt'] ?? '') }}" 
+                                inputmode="numeric" maxlength="3" pattern="^\d{1,3}$"
+                                oninput="this.value = this.value.replace(/[^\d]/g,'').slice(0,3)"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-100 focus:border-[#2F5AA8] outline-none transition">
                             @error('rt') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-slate-700 mb-2">RW</label>
-                            <input type="text" name="rw" value="{{ old('rw', $prefill['rw'] ?? '') }}" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-100 focus:border-[#2F5AA8] outline-none transition">
+                            <input type="text" name="rw" value="{{ old('rw', $prefill['rw'] ?? '') }}" 
+                                inputmode="numeric" maxlength="3" pattern="^\d{1,3}$"
+                                oninput="this.value = this.value.replace(/[^\d]/g,'').slice(0,3)"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-100 focus:border-[#2F5AA8] outline-none transition">
                             @error('rw') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
@@ -85,7 +95,7 @@
                 <!-- Detail Tambahan -->
                 <div class="mb-8">
                     <label class="block text-sm font-bold text-slate-700 mb-2">Detail Tambahan (Opsional)</label>
-                    <textarea name="alamat_detail" rows="3" placeholder="Nama jalan, patokan rumah, warna pagar, dll" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-100 focus:border-[#2F5AA8] outline-none transition">{{ old('alamat_detail', $prefill['alamat_detail'] ?? '') }}</textarea>
+                    <textarea name="alamat_detail" rows="3" maxlength="200" placeholder="Nama jalan, patokan rumah, warna pagar, dll" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-100 focus:border-[#2F5AA8] outline-none transition">{{ old('alamat_detail', $prefill['alamat_detail'] ?? '') }}</textarea>
                 </div>
 
                 <!-- Navigation Buttons -->

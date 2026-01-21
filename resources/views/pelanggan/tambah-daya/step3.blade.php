@@ -117,7 +117,7 @@
                         <i class="fas fa-arrow-left mr-2"></i> Kembali
                     </a>
                     <button type="submit" class="px-8 py-3 bg-[#2F5AA8] text-white font-bold rounded-xl hover:bg-[#274C8E] transition shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30">
-                        Simpan Permohonan <i class="fas fa-save ml-2"></i>
+                        Lanjutkan <i class="fas fa-arrow-right ml-2"></i>
                     </button>
                 </div>
             </form>

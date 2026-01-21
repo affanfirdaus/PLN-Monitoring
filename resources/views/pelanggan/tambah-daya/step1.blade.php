@@ -15,7 +15,7 @@
             <h2 class="text-2xl font-bold text-slate-800 mb-2">Persiapan Data Pelanggan</h2>
             <p class="text-slate-500 mb-8">Siapa yang mengajukan permohonan tambah daya ini?</p>
 
-            <form action="{{ route('tambah-daya.step1.store') }}" method="POST">
+            <form action="{{ route('tambah-daya.step1.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
                 <!-- Radio Options -->
@@ -23,7 +23,7 @@
                     <!-- Option: Self -->
                     <label class="relative cursor-pointer group">
                         <input type="radio" name="for_whom" value="self" class="peer sr-only" {{ old('for_whom', $wizard['for_whom']) === 'self' ? 'checked' : '' }} onchange="toggleSection('self')">
-                        <div class="p-6 rounded-2xl border-2 border-slate-200 peer-checked:border-[#2F5AA8] peer-checked:bg-blue-50/50 hover:border-blue-100 transition-all text-center h-full flex flex-col justify-center items-center gap-3">
+                         <div class="p-6 rounded-2xl border-2 border-slate-200 peer-checked:border-[#2F5AA8] peer-checked:bg-blue-50/50 hover:border-blue-100 transition-all text-center h-full flex flex-col justify-center items-center gap-3">
                             <div class="w-12 h-12 rounded-full bg-blue-100 text-[#2F5AA8] flex items-center justify-center text-xl">
                                 <i class="fas fa-user"></i>
                             </div>
@@ -55,11 +55,21 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-semibold text-slate-500 mb-1">Nama Pemohon</label>
-                                <input type="text" value="{{ $userProfile->nama_lengkap ?? $user->name }}" readonly class="w-full px-4 py-2 bg-slate-200 border border-slate-300 rounded-xl text-slate-600 font-medium focus:outline-none">
+                                <div class="flex items-center gap-2">
+                                    <input type="text" value="{{ $userProfile->nama_lengkap ?? $user->name }}" readonly class="w-full px-4 py-2 bg-slate-200 border border-slate-300 rounded-xl text-slate-600 font-medium focus:outline-none">
+                                    @if(!empty($user->nik))
+                                        <i class="fas fa-check-circle text-green-500 text-xl" title="Data Terverifikasi"></i>
+                                    @endif
+                                </div>
                             </div>
                             <div>
                                 <label class="block text-sm font-semibold text-slate-500 mb-1">NIK / No KTP</label>
-                                <input type="text" value="{{ $user->nik }}" readonly class="w-full px-4 py-2 bg-slate-200 border border-slate-300 rounded-xl text-slate-600 font-medium focus:outline-none">
+                                <div class="flex items-center gap-2">
+                                    <input type="text" value="{{ $user->nik }}" readonly class="w-full px-4 py-2 bg-slate-200 border border-slate-300 rounded-xl text-slate-600 font-medium focus:outline-none">
+                                    @if(!empty($user->nik))
+                                        <i class="fas fa-check-circle text-green-500 text-xl" title="Data Terverifikasi"></i>
+                                    @endif
+                                </div>
                                 @if(empty($user->nik))
                                     <p class="text-xs text-red-500 mt-1"><i class="fas fa-exclamation-circle"></i> Mohon lengkapi NIK pada menu Profil terlebih dahulu.</p>
                                 @endif
@@ -86,10 +96,34 @@
                         <div id="nik-success" class="hidden mt-3 bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3">
                             <div class="mt-0.5 text-green-600"><i class="fas fa-check-circle text-lg"></i></div>
                             <div>
-                                <p class="text-xs text-green-800 font-bold uppercase tracking-wide">Data Ditemukan</p>
+                                <p class="text-xs text-green-800 font-bold uppercase tracking-wide">Data Ditemukan & Terverifikasi</p>
                                 <p class="text-sm font-bold text-slate-800 mt-1" id="verified-name">Nama Pelanggan</p>
                                 <p class="text-xs text-slate-500" id="verified-id">ID Pel: -</p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ID Pelanggan Section (Always Visible) -->
+                <div id="section-idpel" class="mt-8 pt-8 border-t border-slate-100 animate-fade-in-down">
+                    <label class="block text-sm font-bold text-slate-700 mb-2">ID Pelanggan / Nomor Meter</label>
+                    <div class="flex gap-2">
+                        <input type="text" name="id_pelanggan" id="id_pelanggan" value="{{ old('id_pelanggan') }}"
+                            class="flex-1 px-4 py-3 rounded-xl border border-slate-300 focus:ring-4 focus:ring-blue-100 focus:border-[#2F5AA8] outline-none transition font-medium"
+                            placeholder="Masukkan 12 Digit ID Pelanggan atau No Meter...">
+                        <button type="button" onclick="verifyIdPel()" class="px-6 py-3 bg-slate-800 text-white font-semibold rounded-xl hover:bg-slate-700 transition shadow-lg shadow-slate-900/10 whitespace-nowrap">
+                            Verifikasi
+                        </button>
+                    </div>
+                    <div id="idpel-error" class="hidden mt-2 text-sm text-red-500 flex items-center gap-1">
+                        <i class="fas fa-times-circle"></i> <span>ID Pelanggan tidak ditemukan.</span>
+                    </div>
+                    <div id="idpel-success" class="hidden mt-3 bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3">
+                        <div class="mt-0.5 text-green-600"><i class="fas fa-check-circle text-lg"></i></div>
+                        <div>
+                            <p class="text-xs text-green-800 font-bold uppercase tracking-wide">Data Pelanggan Ditemukan</p>
+                            <p class="text-sm font-bold text-slate-800 mt-1" id="idpel-name">Nama Pelanggan</p>
+                            <p class="text-xs text-slate-500" id="idpel-info">No Meter: -</p>
                         </div>
                     </div>
                 </div>
@@ -99,7 +133,7 @@
                     <a href="{{ route('monitoring') }}" class="px-6 py-3 text-slate-500 font-semibold hover:text-slate-800 transition">
                         Batal
                     </a>
-                    <button type="submit" class="px-8 py-3 bg-[#2F5AA8] text-white font-bold rounded-xl hover:bg-[#274C8E] transition shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30">
+                    <button type="submit" id="btn-next" disabled class="px-8 py-3 bg-slate-300 text-white font-bold rounded-xl cursor-not-allowed transition shadow-none">
                         Lanjutkan <i class="fas fa-arrow-right ml-2"></i>
                     </button>
                 </div>
@@ -109,31 +143,84 @@
 </div>
 
 <script>
+    let isNikVerified = false;
+    let isIdPelVerified = false;
+    // For self, nik is implicitly verified if exists
+    let isSelf = {{ old('for_whom', $wizard['for_whom']) === 'self' || $wizard['for_whom'] === null ? 'true' : 'false' }};
+    const hasProfileNik = {{ !empty($user->nik) ? 'true' : 'false' }};
+
     function toggleSection(val) {
         document.getElementById('section-self').classList.add('hidden');
         document.getElementById('section-other').classList.add('hidden');
         
         if (val === 'self') {
             document.getElementById('section-self').classList.remove('hidden');
+            isSelf = true;
         } else if (val === 'other') {
             document.getElementById('section-other').classList.remove('hidden');
+            isSelf = false;
         }
+        checkValidity();
     }
 
-    // Init state on load (for validation errors)
-    document.addEventListener("DOMContentLoaded", () => {
-        const selected = document.querySelector('input[name="for_whom"]:checked');
-        if (selected) toggleSection(selected.value);
-    });
+    async function verifyIdPel() {
+        const idpel = document.getElementById('id_pelanggan').value;
+        const errorDiv = document.getElementById('idpel-error');
+        const successDiv = document.getElementById('idpel-success');
+        
+        errorDiv.classList.add('hidden');
+        successDiv.classList.add('hidden');
+        isIdPelVerified = false;
+        checkValidity();
+
+        if (idpel.length < 10) {
+            errorDiv.querySelector('span').innerText = 'Format ID Pelanggan tidak sesuai.';
+            errorDiv.classList.remove('hidden');
+            return;
+        }
+
+        try {
+            const response = await fetch("{{ route('tambah-daya.check-nik') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ 
+                    id_pelanggan: idpel,
+                    mode: isSelf ? 'self' : 'other'
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok && (result.status === 'ok' || result.status === 'found')) {
+                document.getElementById('idpel-name').innerText = result.data.nama;
+                document.getElementById('idpel-info').innerText = 'ID Pel: ' + result.data.id_pelanggan + ' | Meter: ' + result.data.no_meter;
+                successDiv.classList.remove('hidden');
+                isIdPelVerified = true;
+            } else {
+                errorDiv.querySelector('span').innerText = result.message || 'ID Pelanggan tidak ditemukan.';
+                errorDiv.classList.remove('hidden');
+            }
+        } catch (error) {
+            console.error('Verifikasi Error:', error);
+            errorDiv.querySelector('span').innerText = 'Terjadi kesalahan sistem.';
+            errorDiv.classList.remove('hidden');
+        }
+        checkValidity();
+    }
 
     async function verifyNik() {
         const nik = document.getElementById('nik_other').value;
         const errorDiv = document.getElementById('nik-error');
         const successDiv = document.getElementById('nik-success');
         
-        // Reset UI
         errorDiv.classList.add('hidden');
         successDiv.classList.add('hidden');
+        isNikVerified = false;
+        checkValidity();
 
         if (nik.length !== 16) {
             errorDiv.querySelector('span').innerText = 'NIK harus 16 digit.';
@@ -154,21 +241,63 @@
 
             const result = await response.json();
 
-            if (response.ok && result.status === 'found') {
-                document.getElementById('verified-name').innerText = result.data.nama_lengkap;
-                document.getElementById('verified-id').innerText = 'ID Pel: ' + (result.data.id_pelanggan_12 || '-') + ' | No Meter: ' + (result.data.no_meter || '-');
+            if (response.ok && (result.status === 'ok' || result.status === 'found')) {
+                document.getElementById('verified-name').innerText = result.data.nama;
+                document.getElementById('verified-id').classList.add('hidden'); // Hide details as requested
                 successDiv.classList.remove('hidden');
+                isNikVerified = true;
             } else {
-                // Handle mixed errors (validation or 404)
-                const msg = result.message || 'NIK tidak ditemukan dalam database PLN.';
-                errorDiv.querySelector('span').innerText = msg;
+                errorDiv.querySelector('span').innerText = result.message || 'NIK tidak ditemukan.';
                 errorDiv.classList.remove('hidden');
             }
         } catch (error) {
             console.error('Verifikasi Error:', error);
-            errorDiv.querySelector('span').innerText = 'Terjadi kesalahan sistem (Cek Console).';
+            errorDiv.querySelector('span').innerText = 'Terjadi kesalahan sistem.';
             errorDiv.classList.remove('hidden');
         }
+        checkValidity();
     }
+
+    function checkValidity() {
+        const btn = document.getElementById('btn-next');
+        let valid = false;
+
+        if (isIdPelVerified) {
+            if (isSelf) {
+                if (hasProfileNik) valid = true;
+            } else {
+                if (isNikVerified) valid = true;
+            }
+        }
+
+        if (valid) {
+            btn.disabled = false;
+            btn.classList.remove('bg-slate-300', 'cursor-not-allowed', 'shadow-none');
+            btn.classList.add('bg-[#2F5AA8]', 'hover:bg-[#274C8E]', 'shadow-lg', 'shadow-blue-900/20');
+        } else {
+            btn.disabled = true;
+            btn.classList.add('bg-slate-300', 'cursor-not-allowed', 'shadow-none');
+            btn.classList.remove('bg-[#2F5AA8]', 'hover:bg-[#274C8E]', 'shadow-lg', 'shadow-blue-900/20');
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const selectedForWhom = document.querySelector('input[name="for_whom"]:checked');
+        if (selectedForWhom) toggleSection(selectedForWhom.value);
+        else toggleSection('self'); // Default
+        
+        // Prevent Double Submit with proper flag
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const btn = document.getElementById('btn-next');
+            
+            // Only disable once
+            if (!btn.hasAttribute('data-submitting')) {
+                btn.setAttribute('data-submitting', 'true');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Memproses...';
+            }
+        });
+    });
 </script>
+
 @endsection

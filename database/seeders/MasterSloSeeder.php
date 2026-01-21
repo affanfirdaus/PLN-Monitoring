@@ -8,12 +8,12 @@ use Illuminate\Database\Seeder;
  * DEPRECATED - Data sudah dipindah ke DummyPelangganSeeder
  * File ini dikosongkan untuk menghindari duplikasi data
  */
-class MasterPelangganSeeder extends Seeder
+class MasterSloSeeder extends Seeder
 {
     public function run(): void
     {
         // INTENTIONALLY EMPTY
         // All data moved to DummyPelangganSeeder for single source of truth
-        $this->command->warn('⚠ MasterPelangganSeeder is deprecated. Data is in DummyPelangganSeeder.');
+        $this->command->warn('⚠ MasterSloSeeder is deprecated. Data is in DummyPelangganSeeder.');
     }
 }

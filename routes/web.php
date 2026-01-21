@@ -56,6 +56,19 @@ Route::middleware(['customer.only'])->group(function () {
     Route::post('/pelanggan/tambah-daya/step-3', [TambahDayaController::class, 'storeStep3'])->name('tambah-daya.step3.store');
     Route::post('/pelanggan/tambah-daya/check-nik', [TambahDayaController::class, 'checkNik'])->name('tambah-daya.check-nik');
 
+    // Step 4: Data SLO
+    Route::get('/pelanggan/tambah-daya/step-4', [TambahDayaController::class, 'step4'])->name('tambah-daya.step4');
+    Route::post('/pelanggan/tambah-daya/step-4', [TambahDayaController::class, 'storeStep4'])->name('tambah-daya.step4.store');
+    Route::post('/pelanggan/tambah-daya/check-slo', [TambahDayaController::class, 'checkSlo'])->name('tambah-daya.check-slo');
+
+    // Step 5: Finalisasi & Data Lengkap
+    Route::get('/pelanggan/tambah-daya/step-5', [TambahDayaController::class, 'step5'])->name('tambah-daya.step5');
+    Route::post('/pelanggan/tambah-daya/step-5', [TambahDayaController::class, 'storeStep5'])->name('tambah-daya.step5.store');
+    
+    // Step 5 Verifications
+    Route::post('/pelanggan/tambah-daya/verify-kk', [TambahDayaController::class, 'verifyKK'])->name('tambah-daya.verify-kk');
+    Route::post('/pelanggan/tambah-daya/verify-npwp', [TambahDayaController::class, 'verifyNPWP'])->name('tambah-daya.verify-npwp');
+
     // Profile Management
     Route::get('/pelanggan/profile', [PelangganProfileController::class, 'edit'])->name('pelanggan.profile');
     Route::put('/pelanggan/profile', [PelangganProfileController::class, 'update'])->name('pelanggan.profile.update');

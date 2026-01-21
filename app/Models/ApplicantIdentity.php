@@ -9,7 +9,20 @@ class ApplicantIdentity extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'nik',
+        'nama_lengkap',
+        'user_id',
+        'no_meter',
+        'id_pelanggan_12',
+        'default_provinsi',
+        'default_kab_kota',
+        'default_kecamatan',
+        'default_kelurahan',
+        'default_rt',
+        'default_rw',
+        'default_alamat_detail',
+    ];
 
     public function user()
     {
