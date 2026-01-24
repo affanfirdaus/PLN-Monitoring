@@ -14,6 +14,23 @@ class PelangganAuthController extends Controller
 {
     public function showLogin()
     {
+        // If already authenticated, redirect based on role
+        if (Auth::check()) {
+            $user = Auth::user();
+            
+            // If pelanggan, redirect to landing
+            if ($user->role === 'pelanggan') {
+                return redirect()->route('landing');
+            }
+            
+            // If pegawai (any internal role), redirect to their panel
+            $roleConfig = config('internal_roles');
+            if (isset($roleConfig[$user->role])) {
+                $path = $roleConfig[$user->role]['path'];
+                return redirect($path)->with('info', 'Anda sudah login sebagai pegawai.');
+            }
+        }
+
         return view('auth.pelanggan.login');
     }
 
@@ -27,6 +44,13 @@ class PelangganAuthController extends Controller
         // Attempt login via Users table (Active accounts only)
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'role' => 'pelanggan'])) {
             $request->session()->regenerate();
+            
+            // Redirect to 'next' URL if exists, otherwise to landing
+            // Redirect to 'next' URL if exists and is internal
+            $next = $request->input('next');
+            if ($next && str_starts_with($next, '/') && !str_starts_with($next, '//')) {
+                 return redirect()->to($next);
+            }
             return redirect()->route('landing');
         }
 

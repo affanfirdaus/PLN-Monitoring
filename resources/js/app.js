@@ -144,4 +144,48 @@ document.addEventListener('DOMContentLoaded', () => {
       syncJenisProdukCard();
     }
   });
+
+  // Protected Nav Handler
+  const protectedLinks = document.querySelectorAll('.nav-protected');
+  protectedLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+          const isAuth = document.querySelector('meta[name="is-auth"]')?.content === '1';
+          if (!isAuth) {
+              e.preventDefault();
+              
+              // 1. Show Toast
+              const toast = document.getElementById('toastLoginRequired');
+              if (toast) {
+                  toast.classList.remove('hidden');
+                  toast.classList.remove('opacity-0', 'translate-y-[-10px]');
+                  
+                  // Hide after 3s
+                  setTimeout(() => {
+                      toast.classList.add('opacity-0', 'translate-y-[-10px]');
+                      setTimeout(() => toast.classList.add('hidden'), 300);
+                  }, 3000);
+              }
+
+              // 2. Shake Buttons
+              const loginWrapper = document.getElementById('heroLoginActions');
+              const btnPegawai = document.getElementById('btnLoginPegawai');
+              const btnPelanggan = document.getElementById('btnLoginPelanggan');
+
+              if (loginWrapper) {
+                 loginWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                 
+                 if (btnPegawai) {
+                     btnPegawai.classList.add('shake-x');
+                     // Force reflow/restart
+                     setTimeout(() => btnPegawai.classList.remove('shake-x'), 1000);
+                 }
+                 if (btnPelanggan) {
+                     btnPelanggan.classList.add('shake-x');
+                     setTimeout(() => btnPelanggan.classList.remove('shake-x'), 1000);
+                 }
+              }
+          }
+      });
+  });
+
 });

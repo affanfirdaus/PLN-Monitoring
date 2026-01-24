@@ -52,10 +52,17 @@
                     <!-- Dropdown Menu -->
                     <div id="userDropdownMenu" class="hidden absolute top-full right-0 mt-2 w-48 bg-white border border-slate-100 rounded-xl shadow-lg p-1 z-50">
                          <a href="{{ route('pelanggan.profile') }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 rounded-lg">Lihat Profil Saya</a>
-                         <form action="{{ route('pelanggan.logout') }}" method="POST" class="w-full">
-                            @csrf
-                            <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg font-medium">Logout</button>
-                        </form>
+                         @if(Auth::user()->role === 'pelanggan')
+                             <form action="{{ route('pelanggan.logout') }}" method="POST" class="w-full">
+                                @csrf
+                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg font-medium">Logout</button>
+                            </form>
+                         @else
+                             <form action="{{ route('pegawai.logout') }}" method="POST" class="w-full">
+                                @csrf
+                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg font-medium">Logout</button>
+                            </form>
+                         @endif
                     </div>
                 @else
                     <!-- Guest Dropdown -->
@@ -76,9 +83,16 @@
     </header>
 
     <!-- Main Content -->
-    <main class="pt-24 pb-12 px-4 md:px-6 max-w-[1200px] mx-auto min-h-screen">
-        @yield('content')
-    </main>
+    <!-- Main Content -->
+    @if(isset($no_container) && $no_container)
+        <main class="pt-20 min-h-screen">
+            @yield('content')
+        </main>
+    @else
+        <main class="pt-24 pb-12 px-4 md:px-6 max-w-[1200px] mx-auto min-h-screen">
+            @yield('content')
+        </main>
+    @endif
 
     <!-- Use app.js for dropdown logic -->
 </body>

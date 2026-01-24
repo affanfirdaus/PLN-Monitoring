@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'login.focus' => \App\Http\Middleware\RequireLoginAndFocus::class,
             'customer.only' => \App\Http\Middleware\RequireCustomerAuth::class,
+            'role' => \App\Http\Middleware\EnsureRole::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

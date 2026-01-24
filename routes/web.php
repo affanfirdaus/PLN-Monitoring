@@ -10,6 +10,12 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
+// Global login route (required by Laravel auth middleware)
+// Global login route
+Route::get('/login', function () {
+    return redirect()->route('pelanggan.login');
+})->name('login');
+
 Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('/login', [PelangganAuthController::class, 'showLogin'])->name('login');
@@ -52,12 +58,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/password-reset-requests/{id}/reject', [App\Http\Controllers\Auth\ForgotPasswordRequestController::class, 'reject'])->name('password-reset-requests.reject');
 });
 
-// Pegawai dummy route for now
-// Pegawai Login Unit Selection
-Route::get('/pegawai/login', [App\Http\Controllers\PegawaiUnitController::class, 'index'])->name('pegawai.login');
+// Pegawai Authentication (Single Door Login for Internal Staff)
+Route::prefix('pegawai')->name('pegawai.')->group(function () {
+    Route::middleware('guest')->group(function () {
+        Route::get('/login', [App\Http\Controllers\PegawaiAuthController::class, 'showLogin'])->name('login');
+        Route::post('/login', [App\Http\Controllers\PegawaiAuthController::class, 'login'])->name('login.post');
+    });
+    
+    Route::middleware('auth')->group(function () {
+        Route::post('/logout', [App\Http\Controllers\PegawaiAuthController::class, 'logout'])->name('logout');
+    });
+});
 
 // Monitoring & Pembayaran (Protected)
-Route::middleware(['customer.only'])->group(function () {
+Route::middleware(['auth', 'customer.only'])->group(function () {
     Route::get('/monitoring', [App\Http\Controllers\MonitoringController::class, 'index'])->name('monitoring');
     Route::get('/monitoring/{id}', [App\Http\Controllers\MonitoringController::class, 'show'])->name('monitoring.show');
     Route::get('/pembayaran', [App\Http\Controllers\PembayaranController::class, 'index'])->name('pembayaran');

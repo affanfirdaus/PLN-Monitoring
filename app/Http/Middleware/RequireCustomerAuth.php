@@ -16,24 +16,30 @@ class RequireCustomerAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // 1. Check if Guest -> Redirect to Landing with focus param
+        // Guest -> Handler Specific
         if (!Auth::check()) {
-            return redirect()->route('landing', [
-                'need_login' => 1,
-                'focus' => 'hero_login', // Sesuai instruction B1
-                'from' => $request->route()?->getName() ?? 'unknown',
+            // Case 1: Tamu akses Monitoring/Pembayaran via URL
+            if ($request->is('monitoring') || $request->is('pembayaran') || $request->is('monitoring/*')) {
+                return redirect()->route('landing')->with('need_login', true);
+            }
+            
+            // Case 2: Tamu akses route lain yang diproteksi (misal wizard tengah jalan) -> Lempar login pelanggan
+            return redirect()->route('pelanggan.login', [
+                'next' => $request->fullUrl(),
             ]);
         }
 
-        // 2. Check if Role is NOT pelanggan (Optional: same redirect or 403)
-        // User requested: "kalau login tapi role bukan pelanggan: boleh redirect same landing... atau 403"
-        // Let's stricter: Redirect to landing (cleaner UX for employees trying to access customer routes)
-        // 2. Check if Role is NOT pelanggan
+        // Pegawai nyasar ke area pelanggan -> lempar ke panelnya
         if (Auth::user()->role !== 'pelanggan') {
-             return redirect()->route('landing', [
-                'need_login' => 1,
-                'from' => $request->route()?->getName() ?? 'unknown',
-             ]);
+            $roleConfig = config('internal_roles');
+            $userRole = Auth::user()->role;
+
+            if (isset($roleConfig[$userRole])) {
+                return redirect($roleConfig[$userRole]['path'])
+                    ->with('error', 'Halaman ini khusus untuk pelanggan.');
+            }
+
+            return redirect()->route('landing')->with('error', 'Anda tidak memiliki akses ke halaman ini.');
         }
 
         return $next($request);

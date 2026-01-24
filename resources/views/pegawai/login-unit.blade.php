@@ -117,13 +117,13 @@
                     </div>
                 </div>
 
-                <!-- TE -->
+                <!-- Unit TE -->
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-xl hover:shadow-purple-900/5 hover:border-purple-100 transition-all duration-300 overflow-hidden group">
                     <div class="h-32 bg-purple-50 flex items-center justify-center group-hover:bg-purple-100 transition-colors">
                         <i class="fas fa-bolt text-4xl text-purple-300 group-hover:text-purple-500 transition-colors"></i>
                     </div>
                     <div class="p-5 text-center">
-                        <h3 class="text-lg font-bold text-slate-800 mb-4">TE</h3>
+                        <h3 class="text-lg font-bold text-slate-800 mb-4">Unit TE</h3>
                         <a href="#" class="block w-full rounded-xl bg-[#2F5AA8] text-white py-2.5 font-semibold hover:bg-[#274C8E] hover:shadow-lg hover:-translate-y-0.5 transition-all shadow-md shadow-blue-900/10">Login</a>
                     </div>
                 </div>

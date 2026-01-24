@@ -13,6 +13,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="is-auth" content="{{ Auth::check() ? '1' : '0' }}">
+    <meta name="auth-role" content="{{ Auth::check() ? Auth::user()->role : '' }}">
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .animate-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        .animate-fade-in-down {
+            animation: fadeInDown 0.5s ease-out;
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body class="font-sans text-slate-800 antialiased bg-white selection:bg-blue-100 selection:text-blue-900">
 
@@ -37,8 +56,8 @@
                 <!-- Navigation Menu (Desktop) -->
                 <nav class="hidden md:flex items-center space-x-8">
                     <a href="{{ route('landing') }}" class="text-[#2F5AA8] font-semibold border-b-2 border-[#2F5AA8] pb-1">Dashboard</a>
-                    <a href="{{ route('monitoring') }}" class="text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Monitoring</a>
-                    <a href="{{ route('pembayaran') }}" class="text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Pembayaran</a>
+                    <a href="#" onclick="handleProtectedLink(event)" data-route="monitoring" class="nav-protected text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Monitoring</a>
+                    <a href="#" onclick="handleProtectedLink(event)" data-route="pembayaran" class="nav-protected text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Pembayaran</a>
                 </nav>
             </div>
 
@@ -148,7 +167,8 @@
                         
                         <!-- Buttons -->
                         <!-- Buttons -->
-                        @if(Auth::guest() || Auth::user()->role !== 'pelanggan')
+                        <!-- Buttons: Logic Updated Based on Role -->
+                        @if(Auth::guest())
                         <div id="heroLoginActions" class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4">
                             <!-- Login Pegawai (Primary) -->
                             <a id="btnLoginPegawai" href="{{ route('pegawai.login') }}" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-[#2F5AA8] text-white font-semibold text-sm hover:bg-[#274C8E] transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 focus:ring-4 focus:ring-blue-100">
@@ -158,6 +178,27 @@
                             <a id="btnLoginPelanggan" href="{{ route('pelanggan.login') }}" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-all shadow-sm hover:border-slate-300 focus:ring-4 focus:ring-slate-100">
                                 Login Pelanggan
                             </a>
+                        </div>
+                        @else
+                        <!-- User is Logged In -->
+                        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4">
+                            @if(Auth::user()->role === 'pelanggan')
+                                <a href="{{ route('pelanggan.dashboard') }}" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-[#2F5AA8] text-white font-semibold text-sm hover:bg-[#274C8E] transition-all shadow-lg shadow-blue-900/20">
+                                    <i class="fas fa-columns mr-2"></i> Ke Dashboard Pelanggan
+                                </a>
+                            @else
+                                <!-- Only Show Pegawai Dashboard Button if Role is Internal -->
+                                @php
+                                    $roleConfig = config('internal_roles');
+                                    $dashboardLink = isset($roleConfig[Auth::user()->role]) ? $roleConfig[Auth::user()->role]['path'] : '/internal/dashboard';
+                                @endphp
+                                <a href="{{ url($dashboardLink) }}" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-slate-800 text-white font-semibold text-sm hover:bg-slate-700 transition-all shadow-lg">
+                                    <i class="fas fa-user-shield mr-2"></i> Ke Dashboard Pegawai
+                                </a>
+                            @endif
+                        </div>
+                        <div class="mt-2 text-sm text-slate-500 font-medium">
+                            Anda sedang login sebagai <span class="text-slate-800 font-bold">{{ Auth::user()->name }}</span>
                         </div>
                         @endif
                     </div>
@@ -291,8 +332,63 @@
         </div>
     </div>
 
+    <!-- Debugging Script for User Diagnosis -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Landing Page Loaded');
+            ['btnLoginPegawai', 'btnLoginPelanggan'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) {
+                    console.log(`Found button: ${id} -> href: ${el.getAttribute('href')}`);
+                    el.addEventListener('click', (e) => {
+                        console.log(`CLICKED ${id}`);
+                        // e.preventDefault(); // Uncomment to test blocking locally
+                    });
+                }
+            });
+        });
+    </script>
     <script>
         window.__NEED_LOGIN__ = {{ request('need_login') == 1 ? 'true' : 'false' }};
+    </script>
+
+    <!-- Custom Scripts for Guest Handling -->
+    <script>
+        function handleProtectedLink(event) {
+            event.preventDefault();
+            showToast();
+            shakeLoginButtons();
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toastLoginRequired');
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 4000);
+        }
+
+        function shakeLoginButtons() {
+            const btnPegawai = document.getElementById('btnLoginPegawai');
+            const btnPelanggan = document.getElementById('btnLoginPelanggan');
+            
+            [btnPegawai, btnPelanggan].forEach(btn => {
+                if (btn) {
+                    btn.classList.add('animate-shake');
+                    setTimeout(() => {
+                        btn.classList.remove('animate-shake');
+                    }, 1000);
+                }
+            });
+        }
+
+        // Show toast if redirected with need_login
+        if (window.__NEED_LOGIN__) {
+            document.addEventListener('DOMContentLoaded', () => {
+                showToast();
+                shakeLoginButtons();
+            });
+        }
     </script>
 </body>
 </html>
