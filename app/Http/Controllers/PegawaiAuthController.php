@@ -76,7 +76,10 @@ class PegawaiAuthController extends Controller
         }
 
         // Check if user role matches the selected unit
-        if ($user->role !== $expectedRole) {
+        $normalizedUserRole = str_replace('-', '_', (string) $user->role);
+        $normalizedExpectedRole = str_replace('-', '_', (string) $expectedRole);
+
+        if ($expectedRole && $normalizedUserRole !== $normalizedExpectedRole) {
             Auth::logout();
             throw ValidationException::withMessages([
                 'email' => __('Akun tidak sesuai unit yang dipilih.'),

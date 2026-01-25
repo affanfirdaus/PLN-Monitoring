@@ -80,7 +80,7 @@
                     </div>
                     <div class="p-5 text-center">
                         <h3 class="text-lg font-bold text-slate-800 mb-4">Admin Pelayanan</h3>
-                        <a href="#" class="block w-full rounded-xl bg-[#2F5AA8] text-white py-2.5 font-semibold hover:bg-[#274C8E] hover:shadow-lg hover:-translate-y-0.5 transition-all shadow-md shadow-blue-900/10">Login</a>
+                        <a href="{{ route('pegawai.login', ['role' => 'admin_pelayanan']) }}" class="block w-full rounded-xl bg-[#2F5AA8] text-white py-2.5 font-semibold hover:bg-[#274C8E] hover:shadow-lg hover:-translate-y-0.5 transition-all shadow-md shadow-blue-900/10">Login</a>
                     </div>
                 </div>
 

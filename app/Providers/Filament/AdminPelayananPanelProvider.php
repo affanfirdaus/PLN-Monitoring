@@ -8,7 +8,9 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -26,12 +28,22 @@ class AdminPelayananPanelProvider extends PanelProvider
             ->id('admin-pelayanan')
             ->path('internal/admin-pelayanan')
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::hex('#0B5ED7'),
             ])
+            ->brandName('Sistem Monitoring Layanan | Panel: Admin Layanan')
+            ->brandLogo(asset('images/pln-logo2.png'))
+            ->brandLogoHeight('3rem')
+            ->sidebarCollapsibleOnDesktop()
+            ->collapsedSidebarWidth('9rem')
+            ->maxContentWidth('full')
+            ->assets([
+                Css::make('admin-pelayanan-custom', asset('css/filament/filament/admin-pelayanan.css')),
+            ])
+            ->renderHook(PanelsRenderHook::TOPBAR_END, fn () => view('filament.admin-pelayanan.partials.topbar-center-title'))
             ->discoverResources(in: app_path('Filament/AdminPelayanan/Resources'), for: 'App\\Filament\\AdminPelayanan\\Resources')
             ->discoverPages(in: app_path('Filament/AdminPelayanan/Pages'), for: 'App\\Filament\\AdminPelayanan\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                \App\Filament\AdminPelayanan\Pages\AdminLayananDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/AdminPelayanan/Widgets'), for: 'App\\Filament\\AdminPelayanan\\Widgets')
             ->widgets([
@@ -50,9 +62,6 @@ class AdminPelayananPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            ->brandName('Admin Pelayanan')
-            ->brandLogo(asset('images/pln-logo2.png'))
-            ->brandLogoHeight('2.5rem');
+            ]);
     }
 }

@@ -13,6 +13,11 @@ class Authenticate extends Middleware
     protected function redirectTo(Request $request): ?string
     {
         if (!$request->expectsJson()) {
+            // Specific redirect for Admin Pelayanan
+            if ($request->is('internal/admin-pelayanan*')) {
+                return url('/pegawai/login?role=admin_pelayanan');
+            }
+
             // Check if the request is for internal panel routes
             if ($request->is('internal/*') || $request->is('internal')) {
                 return route('pegawai.login');
