@@ -16,10 +16,15 @@ class AdminLayananDashboard extends BaseDashboard
         return 12;
     }
 
+    public function getBreadcrumbs(): array
+    {
+        return [];
+    }
+
     public function getHeaderWidgets(): array
     {
         return [
-            \App\Filament\AdminPelayanan\Widgets\AdminLayananSearchBox::class,
+            // SearchBox moved to render hook (admin-pelayanan-searchbar.blade.php)
         ];
     }
 

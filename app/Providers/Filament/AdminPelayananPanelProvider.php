@@ -30,16 +30,17 @@ class AdminPelayananPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::hex('#0B5ED7'),
             ])
-            ->brandName('Sistem Monitoring Layanan | Panel: Admin Layanan')
+            ->brandName('Sistem Monitoring PLN')
             ->brandLogo(asset('images/pln-logo2.png'))
-            ->brandLogoHeight('3rem')
+            ->brandLogoHeight('2.5rem')
             ->sidebarCollapsibleOnDesktop()
             ->collapsedSidebarWidth('9rem')
             ->maxContentWidth('full')
             ->assets([
                 Css::make('admin-pelayanan-custom', asset('css/filament/filament/admin-pelayanan.css')),
             ])
-            ->renderHook(PanelsRenderHook::TOPBAR_END, fn () => view('filament.admin-pelayanan.partials.topbar-center-title'))
+            ->renderHook(PanelsRenderHook::BODY_START, fn () => view('filament.admin-pelayanan.partials.admin-pelayanan-searchbar'))
+            ->renderHook(PanelsRenderHook::CONTENT_START, fn () => view('filament.admin-pelayanan.partials.admin-pelayanan-title'))
             ->discoverResources(in: app_path('Filament/AdminPelayanan/Resources'), for: 'App\\Filament\\AdminPelayanan\\Resources')
             ->discoverPages(in: app_path('Filament/AdminPelayanan/Pages'), for: 'App\\Filament\\AdminPelayanan\\Pages')
             ->pages([

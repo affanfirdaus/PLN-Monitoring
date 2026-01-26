@@ -16,38 +16,55 @@
   background:var(--pln-bg) !important;
 }
 
-/* topbar PLN */
-.fi-topbar{
-  background:linear-gradient(90deg,var(--pln-blue),var(--pln-blue-dark)) !important;
-  border-bottom:1px solid rgba(255,255,255,.18) !important;
-  height:64px !important;
+/* topbar PLN - biru gradient dengan layout simetris */
+.fi-panel-admin-pelayanan .fi-topbar{
+  background: linear-gradient(90deg, var(--pln-blue), var(--pln-blue-dark)) !important;
+  border-bottom: 1px solid rgba(255,255,255,.15) !important;
+  height: 64px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 20px !important;
+  position: sticky !important;
+  top: 0;
+  z-index: 50;
 }
 
-/* item topbar jadi putih */
-.fi-topbar *{
-  color:#fff !important;
-}
-.fi-topbar a,
-.fi-topbar button{
-  color:#fff !important;
+/* Topbar items putih untuk background biru */
+.fi-panel-admin-pelayanan .fi-topbar *{
+  color: #ffffff !important;
 }
 
-/* pusatkan title (seperti sketsa) */
-.fi-topbar{
-  position:sticky !important;
-  top:0;
-  z-index:50;
+/* Brand kiri (logo + text) */
+.fi-panel-admin-pelayanan .fi-topbar .fi-logo{
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
 }
+
+.fi-panel-admin-pelayanan .fi-topbar .fi-logo-text{
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+}
+
+/* Remove old center title */
 .pln-topbar-title{
-  position:absolute;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:15px;
-  font-weight:600;
-  letter-spacing:.2px;
-  white-space:nowrap;
-  opacity:.95;
-  pointer-events:none;
+  display: none !important;
+}
+
+/* HIDE BREADCRUMBS COMPLETELY */
+.fi-panel-admin-pelayanan .fi-breadcrumbs{
+  display: none !important;
+}
+
+/* Topbar kanan - hanya profile */
+.fi-panel-admin-pelayanan .fi-topbar .fi-user-menu-button{
+  color: #ffffff !important;
+}
+
+.fi-panel-admin-pelayanan .fi-topbar .fi-user-menu-button .fi-user-name{
+  display: none !important;
 }
 
 /* sidebar putih seperti sketsa */
@@ -96,85 +113,75 @@
   background:#fff !important;
 }
 
-/* padding konten */
-.fi-main-ctn{
-  padding-top:18px !important;
+/* REMOVE EMPTY SPACE AT TOP (kotak merah kosong) */
+.fi-panel-admin-pelayanan .fi-main,
+.fi-panel-admin-pelayanan .fi-page,
+.fi-panel-admin-pelayanan .fi-main-ctn{
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
 
-/* heading page kiri seperti sketsa */
-.fi-header,
-.fi-page-header{
-  justify-content:flex-start !important;
-}
-.fi-header-heading{
-  text-align:left !important;
+/* HIDE DEFAULT FILAMENT PAGE HEADER */
+.fi-panel-admin-pelayanan .fi-header-heading{
+  display: none !important;
 }
 
-/* SEARCHBAR */
-.pln-searchbar{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  background:#fff;
-  border:1px solid var(--pln-border);
-  border-radius:12px;
-  box-shadow:var(--pln-shadow-soft);
-  padding:10px 12px;
+.fi-panel-admin-pelayanan .fi-header,
+.fi-panel-admin-pelayanan .fi-page-header{
+  display: none !important;
 }
 
-.pln-backbtn{
-  width:36px;
-  height:36px;
-  border-radius:10px;
-  border:1px solid var(--pln-border);
-  background:#fff;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:rgba(15,23,42,.75) !important;
+/* SEARCHBAR - nempel ke topbar dengan garis pemisah */
+.fi-panel-admin-pelayanan .pln-searchbar{
+  border-top: 1px solid var(--pln-border);
+  background: #fff;
+  padding: 12px 20px;
+  margin: 0;
 }
 
-.pln-breadcrumb{
-  font-size:13px;
-  color:rgba(15,23,42,.65);
-  display:flex;
-  align-items:center;
-  gap:6px;
-  white-space:nowrap;
+.fi-panel-admin-pelayanan .pln-searchbar__inner{
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.pln-searchwrap{
-  margin-left:auto;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  border:1px solid var(--pln-border);
-  border-radius:12px;
-  padding:8px 12px;
-  min-width:540px;
-  background:#fff;
+.fi-panel-admin-pelayanan .pln-searchbar__input{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--pln-border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #fff;
 }
 
-.pln-searchicon{
-  color:rgba(15,23,42,.45) !important;
-  font-size:14px;
+.fi-panel-admin-pelayanan .pln-searchicon{
+  color: rgba(15,23,42,.45);
+  font-size: 18px;
+  flex-shrink: 0;
 }
 
-.pln-searchinput{
-  width:100%;
-  outline:none;
-  border:none;
-  font-size:13px;
-  color:rgba(15,23,42,.80);
+.fi-panel-admin-pelayanan .pln-searchinput{
+  width: 100%;
+  outline: none;
+  border: none;
+  font-size: 14px;
+  color: rgba(15,23,42,.80);
 }
 
-@media (max-width: 1100px){
-  .pln-searchwrap{ min-width: 360px; }
+/* PAGE TITLE - ada spasi dari searchbar */
+.fi-panel-admin-pelayanan .pln-page-title{
+  max-width: 1400px;
+  margin: 20px auto 16px auto;
+  padding: 0 20px;
 }
-@media (max-width: 820px){
-  .pln-searchbar{ flex-wrap:wrap; }
-  .pln-searchwrap{ min-width: 100%; margin-left:0; }
+
+.fi-panel-admin-pelayanan .pln-page-title h1{
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #0f172a;
+  margin: 0;
+  padding: 0;
 }
 
 /* =========================
