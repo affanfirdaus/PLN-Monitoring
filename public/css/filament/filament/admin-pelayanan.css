@@ -6,196 +6,444 @@
   --pln-border:rgba(15, 23, 42, .08);
   --pln-shadow:0 6px 18px rgba(15, 23, 42, .08);
   --pln-shadow-soft:0 2px 10px rgba(15, 23, 42, .06);
+  --pln-topbar-h:64px; /* Measured from .pln-custom-topbar height */
 }
 
-/* background konten */
-.fi-body,
-.fi-layout,
-.fi-main,
-.fi-page{
-  background:var(--pln-bg) !important;
-}
-
-/* topbar PLN - biru gradient dengan layout simetris */
-.fi-panel-admin-pelayanan .fi-topbar{
-  background: linear-gradient(90deg, var(--pln-blue), var(--pln-blue-dark)) !important;
-  border-bottom: 1px solid rgba(255,255,255,.15) !important;
-  height: 64px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding: 0 20px !important;
-  position: sticky !important;
+/* ============================================
+   CUSTOM TOPBAR BIRU (Fixed)
+   ============================================ */
+.pln-custom-topbar {
+  position: fixed;
   top: 0;
-  z-index: 50;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: linear-gradient(90deg, var(--pln-blue), var(--pln-blue-dark));
+  border-bottom: 1px solid rgba(255,255,255,.15);
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
 }
 
-/* Topbar items putih untuk background biru */
-.fi-panel-admin-pelayanan .fi-topbar *{
-  color: #ffffff !important;
+.pln-custom-topbar__inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  max-width: 100%;
 }
 
-/* Brand kiri (logo + text) */
-.fi-panel-admin-pelayanan .fi-topbar .fi-logo{
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
+/* Left: Logo + Brand */
+.pln-custom-topbar__left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-.fi-panel-admin-pelayanan .fi-topbar .fi-logo-text{
-  font-size: 16px !important;
-  font-weight: 600 !important;
-  color: #ffffff !important;
+.pln-custom-topbar__logo-img {
+  height: 40px;
+  width: auto;
 }
 
-/* Remove old center title */
-.pln-topbar-title{
+.pln-custom-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+}
+
+.pln-custom-topbar__brand-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.pln-custom-topbar__brand-divider {
+  color: rgba(255,255,255,.5);
+  font-weight: 300;
+}
+
+.pln-custom-topbar__brand-panel {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,.9);
+}
+
+/* Right: Controls */
+.pln-custom-topbar__right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Bell */
+.pln-custom-topbar__bell {
+  position: relative;
+  cursor: pointer;
+}
+
+.pln-custom-topbar__bell-icon {
+  width: 22px;
+  height: 22px;
+  color: #ffffff;
+}
+
+.pln-custom-topbar__bell-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #EF4444;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 999px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* User Avatar */
+.pln-custom-topbar__user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.pln-custom-topbar__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pln-custom-topbar__avatar-icon {
+  width: 18px;
+  height: 18px;
+  color: #ffffff;
+}
+
+.pln-custom-topbar__user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+/* Logout Button */
+.pln-custom-topbar__logout-form {
+  margin: 0;
+}
+
+.pln-custom-topbar__logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pln-custom-topbar__logout-btn:hover {
+  background: rgba(255,255,255,.25);
+}
+
+.pln-custom-topbar__logout-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ============================================
+   HEADER ROW (Breadcrumb + Search) - CLOSE TO TOPBAR
+   ============================================ */
+.pln-header-row,
+.pln-searchbar {
+  background: #ffffff;
+  border-bottom: 1px solid var(--pln-border);
+  padding: 8px 24px;
+  margin-top: 8px; /* FIXED: Small gap close to topbar, not 72px */
+}
+
+.pln-header-row__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 100%;
+}
+
+/* Breadcrumb */
+.pln-header-row__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pln-header-row__back-icon {
+  width: 18px;
+  height: 18px;
+  color: rgba(15,23,42,.45);
+}
+
+.pln-header-row__breadcrumb-text {
+  font-size: 13px;
+  color: rgba(15,23,42,.65);
+  font-weight: 500;
+}
+
+/* Search Center */
+.pln-header-row__search {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.pln-header-row__search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 620px;
+  padding: 10px 16px;
+  border: 1px solid var(--pln-border);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.pln-header-row__search-icon {
+  width: 18px;
+  height: 18px;
+  color: rgba(15,23,42,.45);
+  flex-shrink: 0;
+}
+
+.pln-header-row__search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: rgba(15,23,42,.80);
+  background: transparent;
+}
+
+.pln-header-row__search-input::placeholder {
+  color: rgba(15,23,42,.45);
+}
+
+.pln-header-row__right {
+  flex-shrink: 0;
+  width: 100px; /* Balance layout */
+}
+
+/* ============================================
+   HIDE DEFAULT FILAMENT TOPBAR & ELEMENTS
+   ============================================ */
+.fi-panel-admin-pelayanan .fi-topbar {
   display: none !important;
 }
 
-/* HIDE BREADCRUMBS COMPLETELY */
-.fi-panel-admin-pelayanan .fi-breadcrumbs{
-  display: none !important;
-}
-
-/* Topbar kanan - hanya profile */
-.fi-panel-admin-pelayanan .fi-topbar .fi-user-menu-button{
-  color: #ffffff !important;
-}
-
-.fi-panel-admin-pelayanan .fi-topbar .fi-user-menu-button .fi-user-name{
-  display: none !important;
-}
-
-/* sidebar putih seperti sketsa */
-.fi-sidebar{
-  background:#fff !important;
-  border-right:1px solid var(--pln-border) !important;
-}
-
-/* label group sidebar */
-.fi-sidebar-group-label{
-  color:rgba(15,23,42,.55) !important;
-  font-weight:600 !important;
-}
-
-/* item sidebar */
-.fi-sidebar-item a{
-  border-radius:10px !important;
-  margin:2px 10px !important;
-  padding:10px 12px !important;
-  color:rgba(15,23,42,.78) !important;
-}
-
-/* hover */
-.fi-sidebar-item a:hover{
-  background:rgba(11,94,215,.08) !important;
-}
-
-/* active (biru solid) */
-.fi-sidebar-item.fi-active a{
-  background:var(--pln-blue) !important;
-  color:#fff !important;
-}
-.fi-sidebar-item.fi-active a *{
-  color:#fff !important;
-}
-
-/* card / widget / section konsisten */
-.fi-section,
-.fi-wi,
-.fi-ta,
-.fi-fo,
-.fi-in-card{
-  border-radius:var(--pln-card-radius) !important;
-  border:1px solid var(--pln-border) !important;
-  box-shadow:var(--pln-shadow-soft) !important;
-  background:#fff !important;
-}
-
-/* REMOVE EMPTY SPACE AT TOP (kotak merah kosong) */
-.fi-panel-admin-pelayanan .fi-main,
-.fi-panel-admin-pelayanan .fi-page,
-.fi-panel-admin-pelayanan .fi-main-ctn{
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
-/* HIDE DEFAULT FILAMENT PAGE HEADER */
-.fi-panel-admin-pelayanan .fi-header-heading{
+.fi-panel-admin-pelayanan .fi-breadcrumbs {
   display: none !important;
 }
 
 .fi-panel-admin-pelayanan .fi-header,
-.fi-panel-admin-pelayanan .fi-page-header{
+.fi-panel-admin-pelayanan .fi-page-header,
+.fi-panel-admin-pelayanan .fi-header-heading {
   display: none !important;
 }
 
-/* SEARCHBAR - nempel ke topbar dengan garis pemisah */
-.fi-panel-admin-pelayanan .pln-searchbar{
-  border-top: 1px solid var(--pln-border);
-  background: #fff;
-  padding: 12px 20px;
-  margin: 0;
+/* ============================================
+   BODY & LAYOUT ADJUSTMENTS
+   ============================================ */
+.fi-body,
+.fi-layout,
+.fi-main,
+.fi-page {
+  background: var(--pln-bg) !important;
 }
 
-.fi-panel-admin-pelayanan .pln-searchbar__inner{
-  max-width: 1400px;
-  margin: 0 auto;
+/* Content padding untuk fixed topbar + header row */
+.fi-panel-admin-pelayanan .fi-main,
+.fi-panel-admin-pelayanan .fi-page {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
 
-.fi-panel-admin-pelayanan .pln-searchbar__input{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid var(--pln-border);
-  border-radius: 10px;
-  padding: 10px 14px;
-  background: #fff;
+/* ============================================
+   TARGETED TEXT VISIBILITY - SIDEBAR & BREADCRUMBS ONLY
+   ============================================ */
+/* FIXED: Specific selectors only - no anchor override to preserve link states */
+body.fi-panel-admin-pelayanan .fi-sidebar-item-label,
+body.fi-panel-admin-pelayanan .fi-sidebar-item-icon,
+body.fi-panel-admin-pelayanan .fi-breadcrumbs a,
+body.fi-panel-admin-pelayanan .fi-breadcrumbs span,
+.fi-panel-admin-pelayanan .fi-sidebar-item-label,
+.fi-panel-admin-pelayanan .fi-sidebar-item-icon,
+.fi-panel-admin-pelayanan .fi-breadcrumbs a,
+.fi-panel-admin-pelayanan .fi-breadcrumbs span {
+  opacity: 1 !important;
 }
 
-.fi-panel-admin-pelayanan .pln-searchicon{
-  color: rgba(15,23,42,.45);
-  font-size: 18px;
-  flex-shrink: 0;
+.fi-panel-admin-pelayanan .fi-main-ctn {
+  padding-top: 20px !important;
+  padding-bottom: 24px !important;
 }
 
-.fi-panel-admin-pelayanan .pln-searchinput{
-  width: 100%;
-  outline: none;
-  border: none;
-  font-size: 14px;
-  color: rgba(15,23,42,.80);
+/* ============================================
+   SIDEBAR - TEAL #4b9fb7 SOLID (UPDATED)
+   ============================================ */
+
+/* HIDE STRIP HITAM / DARK RAIL / COLLAPSE BUTTON */
+.fi-panel-admin-pelayanan .fi-sidebar-close-btn,
+.fi-panel-admin-pelayanan .fi-sidebar-open-btn,
+.fi-panel-admin-pelayanan [class*="sidebar-collapse"],
+.fi-panel-admin-pelayanan [class*="sidebar-rail"] {
+  display: none !important;
 }
 
-/* PAGE TITLE - ada spasi dari searchbar */
-.fi-panel-admin-pelayanan .pln-page-title{
-  max-width: 1400px;
-  margin: 20px auto 16px auto;
-  padding: 0 20px;
+/* HIDE LOGO DOBEL DI SIDEBAR (Logo hanya di topbar) */
+.fi-panel-admin-pelayanan .fi-sidebar-header,
+.fi-panel-admin-pelayanan .fi-sidebar .fi-logo,
+.fi-panel-admin-pelayanan .fi-sidebar-brand {
+  display: none !important;
 }
 
-.fi-panel-admin-pelayanan .pln-page-title h1{
-  font-size: 28px;
-  font-weight: 700;
-  line-height: 1.2;
-  color: #0f172a;
-  margin: 0;
-  padding: 0;
+/* SIDEBAR CONTAINER - TEAL #4b9fb7 SOLID */
+.fi-panel-admin-pelayanan .fi-sidebar,
+body.fi-panel-admin-pelayanan .fi-sidebar,
+body.fi-panel-admin-pelayanan aside.fi-sidebar {
+  background: #4b9fb7 !important;
+  border-right: 1px solid rgba(255,255,255,.15) !important;
+  margin-top: 64px !important;
+  width: 250px !important;
+  padding-top: 20px !important;
+  box-shadow: 2px 0 8px rgba(0,0,0,.08) !important;
 }
 
-/* =========================
-   STATS OVERVIEW - 5 KOLOM (Admin Pelayanan Only)
-   ========================= */
+/* SIDEBAR NAV CONTAINER */
+.fi-panel-admin-pelayanan .fi-sidebar-nav {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* HIDE GROUP LABELS */
+.fi-panel-admin-pelayanan .fi-sidebar-group-label {
+  display: none !important;
+}
+
+/* MENU ITEM DEFAULT STATE - TEXT PUTIH, ALWAYS VISIBLE */
+.fi-panel-admin-pelayanan .fi-sidebar-item,
+.fi-panel-admin-pelayanan .fi-sidebar-item a,
+body.fi-panel-admin-pelayanan .fi-sidebar .fi-sidebar-item,
+body.fi-panel-admin-pelayanan .fi-sidebar .fi-sidebar-item a {
+  border-radius: 8px !important;
+  margin: 4px 12px !important;
+  padding: 11px 14px !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+/* ICON & LABEL - PUTIH, ALWAYS VISIBLE */
+.fi-panel-admin-pelayanan .fi-sidebar-item a svg,
+.fi-panel-admin-pelayanan .fi-sidebar-item a .fi-sidebar-item-icon,
+.fi-panel-admin-pelayanan .fi-sidebar-item-label,
+body.fi-panel-admin-pelayanan .fi-sidebar .fi-sidebar-item-label,
+body.fi-panel-admin-pelayanan .fi-sidebar .fi-sidebar-item-icon {
+  color: #ffffff !important;
+  opacity: 1 !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* HOVER STATE - SEMI TRANSPARENT WHITE */
+.fi-panel-admin-pelayanan .fi-sidebar-item a:hover,
+.fi-panel-admin-pelayanan .fi-sidebar-item:hover a,
+body.fi-panel-admin-pelayanan .fi-sidebar .fi-sidebar-item:hover a {
+  background: rgba(255,255,255,0.12) !important;
+  color: #ffffff !important;
+}
+
+.fi-panel-admin-pelayanan .fi-sidebar-item a:hover svg,
+.fi-panel-admin-pelayanan .fi-sidebar-item a:hover .fi-sidebar-item-icon {
+  color: #ffffff !important;
+}
+
+/* ACTIVE STATE - WHITE BACKGROUND + WHITE BORDER LEFT */
+.fi-panel-admin-pelayanan .fi-sidebar-item.fi-active a,
+.fi-panel-admin-pelayanan .fi-sidebar-item[aria-current="page"] a,
+body.fi-panel-admin-pelayanan .fi-sidebar .fi-sidebar-item.fi-active a,
+body.fi-panel-admin-pelayanan .fi-sidebar .fi-sidebar-item[aria-current="page"] a {
+  background: rgba(255,255,255,0.18) !important;
+  border-left: 3px solid #ffffff !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  padding-left: 11px !important; /* adjust for border */
+}
+
+.fi-panel-admin-pelayanan .fi-sidebar-item.fi-active a svg,
+.fi-panel-admin-pelayanan .fi-sidebar-item.fi-active a .fi-sidebar-item-icon,
+.fi-panel-admin-pelayanan .fi-sidebar-item.fi-active a * {
+  color: #ffffff !important;
+}
+
+/* LABEL TEXT - ALWAYS VISIBLE */
+.fi-panel-admin-pelayanan .fi-sidebar-item-label {
+  color: #ffffff !important;
+  font-size: 14px !important;
+  opacity: 1 !important;
+}
+
+/* REMOVE ANY DARK BACKGROUND WRAPPER */
+.fi-panel-admin-pelayanan .fi-sidebar-wrapper,
+.fi-panel-admin-pelayanan .fi-sidebar-container {
+  background: transparent !important;
+}
+
+
+
+/* ============================================
+   CARDS & SECTIONS
+   ============================================ */
+.fi-section,
+.fi-wi,
+.fi-ta,
+.fi-fo,
+.fi-in-card {
+  border-radius: var(--pln-card-radius) !important;
+  border: 1px solid var(--pln-border) !important;
+  box-shadow: var(--pln-shadow-soft) !important;
+  background: #fff !important;
+}
+
+/* ============================================
+   STATS OVERVIEW KPI - 6 + 5 GRID
+   ============================================ */
 .fi-panel-admin-pelayanan .fi-wi-stats-overview {
   margin-top: 6px;
 }
 
-/* Override grid untuk responsive karena getColumns() hanya bisa return int */
+/* Override grid untuk responsive */
 .fi-panel-admin-pelayanan .fi-wi-stats-overview > div {
   display: grid !important;
   grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-  gap: 14px !important;
+  gap: 16px !important;
 }
 
 @media (min-width: 640px) {
@@ -212,34 +460,30 @@
 
 @media (min-width: 1280px) {
   .fi-panel-admin-pelayanan .fi-wi-stats-overview > div {
-    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
   }
 }
 
-/* samakan gap antar card */
 .fi-panel-admin-pelayanan .fi-wi-stats-overview .grid {
-  gap: 14px !important;
+  gap: 16px !important;
 }
 
-/* base card: samakan tinggi, radius, shadow halus */
+/* Base stat card */
 .fi-panel-admin-pelayanan .pln-stat {
   border-radius: 12px !important;
   border: 1px solid rgba(15, 23, 42, 0.08) !important;
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06) !important;
   background: #ffffff !important;
-
   padding: 14px 16px !important;
   min-height: 86px !important;
   display: flex !important;
   align-items: center !important;
 }
 
-/* rapikan layout dalam stat card (ikon kiri, teks kanan) */
 .fi-panel-admin-pelayanan .pln-stat > div {
   width: 100% !important;
 }
 
-/* Filament kadang bungkus konten stat, jadi kita target fleksibel */
 .fi-panel-admin-pelayanan .pln-stat .fi-stat {
   width: 100% !important;
 }
@@ -250,7 +494,7 @@
   gap: 12px !important;
 }
 
-/* ikon jadi kotak warna seperti desain */
+/* Icon box berwarna */
 .fi-panel-admin-pelayanan .pln-stat .fi-stat-icon {
   width: 38px !important;
   height: 38px !important;
@@ -260,13 +504,12 @@
   flex: 0 0 38px !important;
 }
 
-/* ukuran ikon */
 .fi-panel-admin-pelayanan .pln-stat .fi-stat-icon svg {
   width: 18px !important;
   height: 18px !important;
 }
 
-/* teks */
+/* Text styling */
 .fi-panel-admin-pelayanan .pln-stat .fi-stat-label {
   font-size: 12px !important;
   line-height: 1.15 !important;
@@ -285,33 +528,25 @@
   white-space: nowrap !important;
 }
 
-/* kalau ada suffix "Pending" supaya tetap satu baris */
-.fi-panel-admin-pelayanan .pln-stat .fi-stat-value span,
-.fi-panel-admin-pelayanan .pln-stat .fi-stat-value small {
-  white-space: nowrap !important;
-}
-
-/* =========================
-   VARIAN WARNA ICON BOX
-   ========================= */
+/* Color variants */
 .fi-panel-admin-pelayanan .pln-stat--primary .fi-stat-icon {
   background: rgba(11, 94, 215, 0.12) !important;
   color: #0B5ED7 !important;
 }
 
 .fi-panel-admin-pelayanan .pln-stat--success .fi-stat-icon {
-  background: rgba(22, 163, 74, 0.12) !important;
-  color: #16a34a !important;
+  background: rgba(34, 197, 94, 0.14) !important;
+  color: #22C55E !important;
 }
 
 .fi-panel-admin-pelayanan .pln-stat--warning .fi-stat-icon {
   background: rgba(245, 158, 11, 0.14) !important;
-  color: #f59e0b !important;
+  color: #F59E0B !important;
 }
 
 .fi-panel-admin-pelayanan .pln-stat--danger .fi-stat-icon {
   background: rgba(239, 68, 68, 0.12) !important;
-  color: #ef4444 !important;
+  color: #EF4444 !important;
 }
 
 .fi-panel-admin-pelayanan .pln-stat--gray .fi-stat-icon {
@@ -319,146 +554,382 @@
   color: #64748b !important;
 }
 
-/* Fallback untuk selector lama jika masih ada */
-.pln-stat .fi-wi-stats-overview-stat-icon {
-  width: 38px !important;
-  height: 38px !important;
+/* ============================================
+   CONTENT AREA - LIGHT #eaf5f8 (UPDATED)
+   ============================================ */
+
+/* MAIN CONTENT WRAPPER - LIGHT BLUE-GRAY */
+.fi-panel-admin-pelayanan .fi-main,
+body.fi-panel-admin-pelayanan .fi-main,
+body.fi-panel-admin-pelayanan .fi-page {
+  background: #eaf5f8 !important;
+  padding: 24px !important;
+  /* NOTE: padding-top removed - will be overridden in PATCH v3 */
+  margin-top: 0 !important;
+}
+
+.fi-panel-admin-pelayanan .fi-main-content {
+  background: transparent !important;
+}
+
+/* DETERMINISTIC TABLE OVERRIDES - ALL LIST PAGES */
+/* FIXED: Direct element override instead of bg-gray class hunting */
+body.fi-panel-admin-pelayanan .fi-ta,
+body.fi-panel-admin-pelayanan .fi-ta-ctn {
+  background: #eaf5f8 !important;
+}
+
+body.fi-panel-admin-pelayanan .fi-ta thead,
+body.fi-panel-admin-pelayanan .fi-ta-header,
+body.fi-panel-admin-pelayanan .fi-ta th {
+  background: #eaf5f8 !important;
+  color: #0f172a !important;
+  /* NOTE: Will be reinforced with opacity in PATCH v3 */
+}
+
+body.fi-panel-admin-pelayanan .fi-ta tbody,
+body.fi-panel-admin-pelayanan .fi-ta tbody tr,
+body.fi-panel-admin-pelayanan .fi-ta td {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+body.fi-panel-admin-pelayanan .fi-ta tbody tr:hover {
+  background: #f0f8fa !important;
+}
+
+/* Fallback: Catch any stray dark backgrounds in content areas */
+body.fi-panel-admin-pelayanan .fi-main .bg-gray-900,
+body.fi-panel-admin-pelayanan .fi-main .bg-gray-950,
+body.fi-panel-admin-pelayanan .fi-main .bg-black {
+  background: #eaf5f8 !important;
+}
+
+/* ============================================
+   CARDS & SECTIONS - LIGHT BACKGROUNDS
+   ============================================ */
+
+/* CARD/SECTION CONTAINER - LIGHT #eaf5f8 */
+.fi-panel-admin-pelayanan .fi-section,
+.fi-panel-admin-pelayanan .fi-card,
+.fi-panel-admin-pelayanan .fi-widget,
+body.fi-panel-admin-pelayanan .fi-section,
+body.fi-panel-admin-pelayanan .fi-card,
+body.fi-panel-admin-pelayanan .fi-ta,
+body.fi-panel-admin-pelayanan .fi-ta-ctn {
+  background: #eaf5f8 !important;
+  border: 1px solid #d8e7ec !important;
   border-radius: 10px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,.04) !important;
+  margin-bottom: 20px !important;
+  overflow: hidden !important;
 }
 
-.pln-stat--blue .fi-wi-stats-overview-stat-icon {
-  background: rgba(11, 94, 215, 0.12) !important;
-  color: #0B5ED7 !important;
+/* SECTION HEADER - LIGHT BACKGROUND */
+.fi-panel-admin-pelayanan .fi-section-header,
+body.fi-panel-admin-pelayanan .fi-section-header {
+  border-bottom: 1px solid #d8e7ec !important;
+  padding: 16px 20px !important;
+  background: #eaf5f8 !important;
 }
 
-.pln-stat--orange .fi-wi-stats-overview-stat-icon {
-  background: rgba(245, 158, 11, 0.15) !important;
-  color: #f59e0b !important;
-}
-
-.pln-stat--green .fi-wi-stats-overview-stat-icon {
-  background: rgba(34, 197, 94, 0.14) !important;
-  color: #22C55E !important;
-}
-
-.pln-stat--red .fi-wi-stats-overview-stat-icon {
-  background: rgba(239, 68, 68, 0.12) !important;
-  color: #EF4444 !important;
-}
-
-.pln-stat .fi-wi-stats-overview-stat-label {
-  font-size: 12px !important;
-  color: rgba(15, 23, 42, 0.68) !important;
-}
-
-.pln-stat .fi-wi-stats-overview-stat-value {
-  font-size: 22px !important;
+/* SECTION HEADING - TEXT GELAP */
+.fi-panel-admin-pelayanan .fi-section-header-heading,
+.fi-panel-admin-pelayanan .fi-section-heading {
+  color: #0f172a !important;
   font-weight: 700 !important;
-  color: rgba(15, 23, 42, 0.92) !important;
+  font-size: 16px !important;
+  opacity: 1 !important;
 }
 
-/* CHART */
-.fi-wi-chart{
-  min-height:320px !important;
-}
-.fi-wi-chart canvas{
-  max-height:240px !important;
-}
-.fi-section-header-heading{
-  font-size:14px !important;
-  font-weight:700 !important;
-  color:rgba(15,23,42,.88) !important;
+/* SECTION DESCRIPTION - TEXT ABU */
+.fi-panel-admin-pelayanan .fi-section-description {
+  color: #475569 !important;
+  font-size: 13px !important;
+  opacity: 1 !important;
 }
 
-/* TABLE */
-.pln-table-wrap{
-  width:100%;
-  overflow:auto;
+/* SECTION CONTENT - WHITE INNER */
+.fi-panel-admin-pelayanan .fi-section-content,
+.fi-panel-admin-pelayanan .fi-card-content {
+  padding: 20px !important;
+  background: #ffffff !important;
 }
 
-.pln-table{
-  border-collapse:separate;
-  border-spacing:0;
+/* ============================================
+   FORMS & INPUTS - BORDER ABU, FOCUS BIRU
+   ============================================ */
+
+/* INPUT FIELDS */
+.fi-panel-admin-pelayanan .fi-input,
+.fi-panel-admin-pelayanan input[type="text"],
+.fi-panel-admin-pelayanan input[type="email"],
+.fi-panel-admin-pelayanan input[type="password"],
+.fi-panel-admin-pelayanan input[type="number"],
+.fi-panel-admin-pelayanan input[type="date"],
+.fi-panel-admin-pelayanan textarea,
+.fi-panel-admin-pelayanan select {
+  border: 1px solid #dee2e6 !important;
+  border-radius: 8px !important;
+  padding: 10px 14px !important;
+  font-size: 14px !important;
+  color: #334155 !important;
+  background: #ffffff !important;
+  transition: all 0.2s ease !important;
 }
 
-.pln-table thead th{
-  background:#F4F7FC;
-  font-size:12px;
-  font-weight:700;
-  color:rgba(15,23,42,.70);
-  padding:10px 12px;
-  border-bottom:1px solid var(--pln-border);
-  text-align:left;
-  white-space:nowrap;
+/* INPUT FOCUS STATE - BIRU PLN */
+.fi-panel-admin-pelayanan .fi-input:focus,
+.fi-panel-admin-pelayanan input:focus,
+.fi-panel-admin-pelayanan textarea:focus,
+.fi-panel-admin-pelayanan select:focus {
+  border-color: var(--pln-blue) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(11,94,215,.12) !important;
 }
 
-.pln-table tbody td{
-  font-size:12.5px;
-  color:rgba(15,23,42,.82);
-  padding:10px 12px;
-  border-bottom:1px solid rgba(15,23,42,.06);
-  white-space:nowrap;
+/* LABEL TEXT */
+.fi-panel-admin-pelayanan .fi-fo-field-wrp-label label {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #475569 !important;
+  margin-bottom: 6px !important;
 }
 
-/* badge status seperti sketsa */
-.pln-badge{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:4px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
-}
-.pln-badge--green{
-  background:rgba(34,197,94,.14);
-  color:#16A34A;
+/* HELPER TEXT */
+.fi-panel-admin-pelayanan .fi-fo-field-wrp-hint {
+  font-size: 12px !important;
+  color: #64748b !important;
 }
 
-/* ===== KPI bottom 3 cards layout control ===== */
+/* ============================================
+   BUTTONS - BIRU PLN PRIMARY, ABU SECONDARY
+   ============================================ */
 
-/* Base */
-.fi-panel-admin-pelayanan .pln-kpi{
+/* PRIMARY BUTTON - BIRU PLN */
+.fi-panel-admin-pelayanan .fi-btn-primary,
+.fi-panel-admin-pelayanan button[type="submit"]:not(.fi-btn-secondary) {
+  background: var(--pln-blue) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 10px 18px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 4px rgba(11,94,215,.2) !important;
+}
+
+.fi-panel-admin-pelayanan .fi-btn-primary:hover,
+.fi-panel-admin-pelayanan button[type="submit"]:not(.fi-btn-secondary):hover {
+  background: #0a52b8 !important;
+  box-shadow: 0 4px 8px rgba(11,94,215,.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* SECONDARY BUTTON - PUTIH BORDER ABU */
+.fi-panel-admin-pelayanan .fi-btn-secondary {
+  background: #ffffff !important;
+  color: #475569 !important;
+  border: 1px solid #dee2e6 !important;
+  border-radius: 8px !important;
+  padding: 10px 18px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.fi-panel-admin-pelayanan .fi-btn-secondary:hover {
+  background: #f8f9fa !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* DANGER BUTTON - MERAH */
+.fi-panel-admin-pelayanan .fi-btn-danger {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 10px 18px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.fi-panel-admin-pelayanan .fi-btn-danger:hover {
+  background: #dc2626 !important;
+}
+
+
+.fi-wi-chart {
+  min-height: 320px !important;
+}
+
+.fi-wi-chart canvas {
+  max-height: 280px !important;
+}
+
+.fi-section-header-heading {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: rgba(15,23,42,.88) !important;
+}
+
+/* ============================================
+   TABLES - LIGHT BACKGROUNDS (UPDATED)
+   ============================================ */
+
+/* FILAMENT TABLE WRAPPER - LIGHT BACKGROUND */
+.fi-panel-admin-pelayanan .fi-ta-table,
+.fi-panel-admin-pelayanan .fi-table,
+body.fi-panel-admin-pelayanan .fi-ta-table,
+body.fi-panel-admin-pelayanan .fi-table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  background: #eaf5f8 !important;
+}
+
+/* TABLE HEADER - LIGHT #eaf5f8 */
+.fi-panel-admin-pelayanan .fi-ta-header,
+.fi-panel-admin-pelayanan .fi-table thead th,
+.fi-panel-admin-pelayanan .fi-ta-header-cell,
+body.fi-panel-admin-pelayanan .fi-ta-header,
+body.fi-panel-admin-pelayanan .fi-ta-header-cell {
+  background: #eaf5f8 !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #d8e7ec !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+}
+
+/* TABLE BODY ROWS - WHITE */
+.fi-panel-admin-pelayanan .fi-ta-row,
+.fi-panel-admin-pelayanan .fi-table tbody tr,
+body.fi-panel-admin-pelayanan .fi-ta-row {
+  background: #ffffff !important;
+  transition: background 0.15s ease !important;
+  color: #0f172a !important;
+}
+
+/* TABLE BODY CELLS - DARK TEXT */
+.fi-panel-admin-pelayanan .fi-ta-cell,
+.fi-panel-admin-pelayanan .fi-table tbody td,
+body.fi-panel-admin-pelayanan .fi-ta-cell {
+  font-size: 13px !important;
+  color: #0f172a !important;
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #e5eef2 !important;
+}
+
+/* HOVER STATE - LIGHT BLUE */
+.fi-panel-admin-pelayanan .fi-ta-row:hover,
+.fi-panel-admin-pelayanan .fi-table tbody tr:hover {
+  background: #f0f8fa !important;
+}
+
+/* TABLE SEARCH INPUT CONTAINER - LIGHT */
+body.fi-panel-admin-pelayanan .fi-ta-search,
+body.fi-panel-admin-pelayanan .fi-ta-header-toolbar {
+  background: #eaf5f8 !important;
+}
+
+/* CUSTOM PLN TABLE (jika masih dipakai) */
+.pln-table-wrap {
+  width: 100%;
+  overflow: auto;
+  background: #eaf5f8;
+}
+
+.pln-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  background: #eaf5f8;
+}
+
+.pln-table thead th {
+  background: #eaf5f8;
+  font-size: 12px;
+  font-weight: 700;
+  color: #0f172a;
+  padding: 12px 16px;
+  border-bottom: 1px solid #d8e7ec;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.pln-table tbody td {
+  font-size: 13px;
+  color: #0f172a;
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5eef2;
+  white-space: nowrap;
+}
+
+.pln-table tbody tr {
+  background: #ffffff;
+}
+
+.pln-table tbody tr:hover {
+  background: #f0f8fa;
+}
+
+/* Badge status */
+.pln-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pln-badge--green {
+  background: rgba(34,197,94,.14);
+  color: #16A34A;
+}
+
+/* ============================================
+   KPI BOTTOM 3 CARDS LAYOUT
+   ============================================ */
+.fi-panel-admin-pelayanan .pln-kpi {
   border-radius: 12px !important;
 }
 
-/* Tall (merah) = tinggi total area kanan (2 half) */
-.fi-panel-admin-pelayanan .pln-kpi--tall{
+.fi-panel-admin-pelayanan .pln-kpi--tall {
   min-height: 520px !important;
   display: flex !important;
   flex-direction: column !important;
 }
 
-/* Half (hijau & ungu) */
-.fi-panel-admin-pelayanan .pln-kpi--half{
+.fi-panel-admin-pelayanan .pln-kpi--half {
   min-height: 250px !important;
   display: flex !important;
   flex-direction: column !important;
 }
 
-/* Supaya isi table ngisi ruang card dan scroll kalau kepanjangan */
 .fi-panel-admin-pelayanan .pln-kpi .fi-section-content,
-.fi-panel-admin-pelayanan .pln-kpi .fi-section-content-ctn{
+.fi-panel-admin-pelayanan .pln-kpi .fi-section-content-ctn {
   flex: 1 1 auto !important;
   min-height: 0 !important;
 }
 
-.fi-panel-admin-pelayanan .pln-kpi table{
+.fi-panel-admin-pelayanan .pln-kpi table {
   width: 100% !important;
 }
 
-/* scroll area table */
 .fi-panel-admin-pelayanan .pln-kpi--tall .pln-table-scroll,
-.fi-panel-admin-pelayanan .pln-kpi--half .pln-table-scroll{
+.fi-panel-admin-pelayanan .pln-kpi--half .pln-table-scroll {
   flex: 1 1 auto !important;
   overflow: auto !important;
   min-height: 0 !important;
 }
 
-/* Mobile: reset height agar tidak terlalu tinggi */
 @media (max-width: 1279px) {
   .fi-panel-admin-pelayanan .pln-kpi--tall,
   .fi-panel-admin-pelayanan .pln-kpi--half {
@@ -471,28 +942,198 @@
   }
 }
 
-/* KPI 3 cards positioning - force layout like sketch */
 @media (min-width: 1280px) {
-  /* pastikan container widget grid "dense" supaya merah bisa rowspan */
   .fi-panel-admin-pelayanan .fi-wi,
   .fi-panel-admin-pelayanan [class*="fi-wi-"],
   .fi-panel-admin-pelayanan .grid {
     grid-auto-flow: dense !important;
   }
 
-  /* MERAH: kiri, span 4 kolom, rowspan 2 */
   .fi-panel-admin-pelayanan .pln-kpi--merah {
     grid-column: 1 / span 4 !important;
     grid-row: span 2 !important;
   }
 
-  /* HIJAU: kanan atas, mulai kolom 5, span 8 */
   .fi-panel-admin-pelayanan .pln-kpi--hijau {
     grid-column: 5 / span 8 !important;
   }
 
-  /* UNGU: kanan bawah, mulai kolom 5, span 8 */
   .fi-panel-admin-pelayanan .pln-kpi--ungu {
     grid-column: 5 / span 8 !important;
   }
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+@media (max-width: 768px) {
+  .pln-custom-topbar__brand {
+    display: none;
+  }
+  
+  .pln-header-row__search {
+    max-width: 100%;
+  }
+  
+  .pln-header-row__right {
+    display: none;
+  }
+}
+
+/* ============================================
+   PATCH v3: CRITICAL FIXES (HIGH SPECIFICITY)
+   ============================================ */
+
+/* A. Sidebar label must NOT truncate (fix "D.." issue) */
+body.fi-panel-admin-pelayanan .fi-sidebar {
+  background: #4b9fb7 !important;
+  width: 280px !important;
+  min-width: 280px !important;
+}
+
+/* Pastikan item full width */
+body.fi-panel-admin-pelayanan .fi-sidebar-item,
+body.fi-panel-admin-pelayanan .fi-sidebar-item a {
+  width: 100% !important;
+}
+
+/* Hilangkan truncation "D.." / "A.." / "P.." */
+body.fi-panel-admin-pelayanan .fi-sidebar-item-label {
+  max-width: none !important;
+  width: auto !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+  opacity: 1 !important;
+  color: #ffffff !important;
+}
+
+/* Icon paksa jelas */
+body.fi-panel-admin-pelayanan .fi-sidebar-item-icon {
+  opacity: 1 !important;
+  color: #ffffff !important;
+}
+
+/* B. Table readability (no washed text) */
+body.fi-panel-admin-pelayanan .fi-main {
+  background: #eaf5f8 !important;
+  color: #0f172a !important;
+}
+
+/* Table container */
+body.fi-panel-admin-pelayanan .fi-ta,
+body.fi-panel-admin-pelayanan .fi-ta-ctn {
+  background: #eaf5f8 !important;
+}
+
+/* Header background + text (FORCE DARK TEXT) */
+body.fi-panel-admin-pelayanan .fi-ta thead,
+body.fi-panel-admin-pelayanan .fi-ta th {
+  background: #eaf5f8 !important;
+}
+
+body.fi-panel-admin-pelayanan .fi-ta th,
+body.fi-panel-admin-pelayanan .fi-ta th * {
+  color: #0f172a !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+}
+
+/* Body rows (FORCE DARK TEXT) */
+body.fi-panel-admin-pelayanan .fi-ta tbody tr,
+body.fi-panel-admin-pelayanan .fi-ta td,
+body.fi-panel-admin-pelayanan .fi-ta td * {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  opacity: 1 !important;
+}
+
+/* Hover */
+body.fi-panel-admin-pelayanan .fi-ta tbody tr:hover,
+body.fi-panel-admin-pelayanan .fi-ta tbody tr:hover td {
+  background: #f0f8fa !important;
+}
+
+/* ============================================
+   FIX: Search Row Overlap & Table Readability
+   ============================================ */
+
+/* FIX 1: Prevent header overlap (topbar is fixed 64px) */
+body.fi-panel-admin-pelayanan {
+  --pln-topbar-h: 64px;
+}
+
+body.fi-panel-admin-pelayanan .fi-main {
+  padding-top: calc(var(--pln-topbar-h) + 10px) !important; /* 74px total - prevents overlap */
+}
+
+/* Give breathing room for search row */
+body.fi-panel-admin-pelayanan .pln-searchbar,
+body.fi-panel-admin-pelayanan .fi-page-header,
+body.fi-panel-admin-pelayanan .fi-breadcrumbs {
+  margin-top: 10px !important;
+}
+
+/* FIX 2: Table readability - force dark text on light background */
+body.fi-panel-admin-pelayanan .fi-ta,
+body.fi-panel-admin-pelayanan .fi-ta-ctn {
+  background: #eaf5f8 !important;
+}
+
+/* Header - dark text on light bg */
+body.fi-panel-admin-pelayanan .fi-ta thead,
+body.fi-panel-admin-pelayanan .fi-ta th {
+  background: #eaf5f8 !important;
+}
+
+body.fi-panel-admin-pelayanan .fi-ta th,
+body.fi-panel-admin-pelayanan .fi-ta th * {
+  color: #0f172a !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+}
+
+/* Rows - dark text on white bg */
+body.fi-panel-admin-pelayanan .fi-ta tbody tr,
+body.fi-panel-admin-pelayanan .fi-ta td,
+body.fi-panel-admin-pelayanan .fi-ta td * {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  opacity: 1 !important;
+}
+
+/* Muted text (e.g., "Showing 1 result") - readable gray */
+body.fi-panel-admin-pelayanan .fi-ta .text-gray-500,
+body.fi-panel-admin-pelayanan .fi-ta .text-gray-400 {
+  color: #475569 !important;
+  opacity: 1 !important;
+}
+
+/* =========================
+   TOPBAR COLOR OVERRIDE
+   Panel: admin-pelayanan
+   ========================= */
+body.fi-panel-admin-pelayanan .pln-custom-topbar,
+body.fi-panel-admin-pelayanan .fi-topbar,
+body.fi-panel-admin-pelayanan header.fi-topbar {
+  background: #2b5c70 !important;
+  background-image: none !important; /* matiin gradient */
+  border-bottom: 0 !important;
+}
+
+/* Pastikan text/icon di topbar tetap kontras */
+body.fi-panel-admin-pelayanan .pln-custom-topbar *,
+body.fi-panel-admin-pelayanan .fi-topbar *,
+body.fi-panel-admin-pelayanan header.fi-topbar * {
+  color: #ffffff !important;
+}
+
+/* Badge/ikon notifikasi biar tetap kebaca */
+body.fi-panel-admin-pelayanan .fi-topbar .fi-icon,
+body.fi-panel-admin-pelayanan .fi-topbar svg,
+body.fi-panel-admin-pelayanan .pln-custom-topbar .fi-icon,
+body.fi-panel-admin-pelayanan .pln-custom-topbar svg {
+  color: #ffffff !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
 }

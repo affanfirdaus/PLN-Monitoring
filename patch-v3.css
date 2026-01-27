@@ -1,0 +1,84 @@
+
+
+/* ============================================
+   PATCH v3: CRITICAL FIXES (HIGH SPECIFICITY)
+   ============================================ */
+
+/* A. Sidebar label must NOT truncate (fix "D.." issue) */
+body.fi-panel-admin-pelayanan .fi-sidebar {
+  background: #4b9fb7 !important;
+  width: 280px !important;
+  min-width: 280px !important;
+}
+
+/* Pastikan item full width */
+body.fi-panel-admin-pelayanan .fi-sidebar-item,
+body.fi-panel-admin-pelayanan .fi-sidebar-item a {
+  width: 100% !important;
+}
+
+/* Hilangkan truncation "D.." / "A.." / "P.." */
+body.fi-panel-admin-pelayanan .fi-sidebar-item-label {
+  max-width: none !important;
+  width: auto !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+  opacity: 1 !important;
+  color: #ffffff !important;
+}
+
+/* Icon paksa jelas */
+body.fi-panel-admin-pelayanan .fi-sidebar-item-icon {
+  opacity: 1 !important;
+  color: #ffffff !important;
+}
+
+/* B. Table readability (no washed text) */
+body.fi-panel-admin-pelayanan .fi-main {
+  background: #eaf5f8 !important;
+  color: #0f172a !important;
+}
+
+/* Table container */
+body.fi-panel-admin-pelayanan .fi-ta,
+body.fi-panel-admin-pelayanan .fi-ta-ctn {
+  background: #eaf5f8 !important;
+}
+
+/* Header background + text (FORCE DARK TEXT) */
+body.fi-panel-admin-pelayanan .fi-ta thead,
+body.fi-panel-admin-pelayanan .fi-ta th {
+  background: #eaf5f8 !important;
+}
+
+body.fi-panel-admin-pelayanan .fi-ta th,
+body.fi-panel-admin-pelayanan .fi-ta th * {
+  color: #0f172a !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+}
+
+/* Body rows (FORCE DARK TEXT) */
+body.fi-panel-admin-pelayanan .fi-ta tbody tr,
+body.fi-panel-admin-pelayanan .fi-ta td,
+body.fi-panel-admin-pelayanan .fi-ta td * {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  opacity: 1 !important;
+}
+
+/* Hover */
+body.fi-panel-admin-pelayanan .fi-ta tbody tr:hover,
+body.fi-panel-admin-pelayanan .fi-ta tbody tr:hover td {
+  background: #f0f8fa !important;
+}
+
+/* C. Remove double top offset */
+body.fi-panel-admin-pelayanan .fi-main {
+  padding-top: 0 !important;
+}
+
+body.fi-panel-admin-pelayanan .pln-searchbar {
+  margin-top: 8px !important;
+}

@@ -25,6 +25,7 @@ class UnitSurveyPanelProvider extends PanelProvider
         return $panel
             ->id('unit-survey')
             ->path('internal/unit-survey')
+            ->authGuard('web')
             ->colors([
                 'primary' => Color::Green,
             ])

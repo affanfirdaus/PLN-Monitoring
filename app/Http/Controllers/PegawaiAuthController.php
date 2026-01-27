@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 class PegawaiAuthController extends Controller
 {
     /**
-     * Show the pegawai login form.
+     * Show the pegawai login form or role selection page.
      */
     public function showLogin(Request $request)
     {
@@ -32,7 +32,7 @@ class PegawaiAuthController extends Controller
         $role = $request->query('role');
         $roleConfig = config('internal_roles');
 
-        // If no role specified or invalid role -> show selection page
+        // If no role specified or invalid role -> show role selection page (6 cards)
         if (!$role || !isset($roleConfig[$role])) {
             return view('auth.pegawai-select-role');
         }
@@ -110,7 +110,7 @@ class PegawaiAuthController extends Controller
         // Regenerate session
         $request->session()->regenerate();
 
-        // Redirect to appropriate panel
+        // Redirect to appropriate panel based on user's role
         return $this->redirectToPanel($user);
     }
 

@@ -16,7 +16,6 @@ class AkunPelangganResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationLabel = 'Akun Pelanggan';
-    protected static ?string $navigationGroup = 'Manajemen Pelanggan';
     protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form

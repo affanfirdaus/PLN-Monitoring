@@ -38,9 +38,6 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
 
     Route::middleware(['auth', CheckRole::class . ':pelanggan'])->group(function () {
         Route::post('/logout', [PelangganAuthController::class, 'logout'])->name('logout');
-        Route::get('/dashboard', function () {
-            return view('pelanggan.dashboard');
-        })->name('dashboard');
         Route::get('/profil', [App\Http\Controllers\PelangganProfileController::class, 'show'])->name('profile');
     });
 });

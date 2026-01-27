@@ -25,6 +25,7 @@ class SupervisorPanelProvider extends PanelProvider
         return $panel
             ->id('supervisor')
             ->path('internal/supervisor')
+            ->authGuard('web')
             ->colors([
                 'primary' => Color::Slate,
             ])

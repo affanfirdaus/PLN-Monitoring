@@ -25,6 +25,7 @@ class UnitKonstruksiPanelProvider extends PanelProvider
         return $panel
             ->id('unit-konstruksi')
             ->path('internal/unit-konstruksi')
+            ->authGuard('web')
             ->colors([
                 'primary' => Color::Orange,
             ])

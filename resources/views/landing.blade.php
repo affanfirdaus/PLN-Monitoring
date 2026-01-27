@@ -56,8 +56,18 @@
                 <!-- Navigation Menu (Desktop) -->
                 <nav class="hidden md:flex items-center space-x-8">
                     <a href="{{ route('landing') }}" class="text-[#2F5AA8] font-semibold border-b-2 border-[#2F5AA8] pb-1">Dashboard</a>
-                    <a href="#" onclick="handleProtectedLink(event)" data-route="monitoring" class="nav-protected text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Monitoring</a>
-                    <a href="#" onclick="handleProtectedLink(event)" data-route="pembayaran" class="nav-protected text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Pembayaran</a>
+                    @guest
+                        <a href="#" onclick="handleProtectedLink(event)" data-route="monitoring" class="nav-protected text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Monitoring</a>
+                        <a href="#" onclick="handleProtectedLink(event)" data-route="pembayaran" class="nav-protected text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Pembayaran</a>
+                    @else
+                        @if(Auth::user()->role === 'pelanggan')
+                            <a href="{{ route('monitoring') }}" class="text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Monitoring</a>
+                            <a href="{{ route('pembayaran') }}" class="text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Pembayaran</a>
+                        @else
+                            <a href="#" onclick="handleProtectedLink(event)" data-route="monitoring" class="nav-protected text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Monitoring</a>
+                            <a href="#" onclick="handleProtectedLink(event)" data-route="pembayaran" class="nav-protected text-slate-600 font-medium hover:text-[#2F5AA8] transition-colors">Pembayaran</a>
+                        @endif
+                    @endguest
                 </nav>
             </div>
 
@@ -168,7 +178,7 @@
                         <!-- Buttons -->
                         <!-- Buttons -->
                         <!-- Buttons: Logic Updated Based on Role -->
-                        @if(Auth::guest())
+                        @guest
                         <div id="heroLoginActions" class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4">
                             <!-- Login Pegawai (Primary) -->
                             <a id="btnLoginPegawai" href="{{ route('pegawai.login') }}" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-[#2F5AA8] text-white font-semibold text-sm hover:bg-[#274C8E] transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-900/30 focus:ring-4 focus:ring-blue-100">
@@ -179,28 +189,7 @@
                                 Login Pelanggan
                             </a>
                         </div>
-                        @else
-                        <!-- User is Logged In -->
-                        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4">
-                            @if(Auth::user()->role === 'pelanggan')
-                                <a href="{{ route('pelanggan.dashboard') }}" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-[#2F5AA8] text-white font-semibold text-sm hover:bg-[#274C8E] transition-all shadow-lg shadow-blue-900/20">
-                                    <i class="fas fa-columns mr-2"></i> Ke Dashboard Pelanggan
-                                </a>
-                            @else
-                                <!-- Only Show Pegawai Dashboard Button if Role is Internal -->
-                                @php
-                                    $roleConfig = config('internal_roles');
-                                    $dashboardLink = isset($roleConfig[Auth::user()->role]) ? $roleConfig[Auth::user()->role]['path'] : '/internal/dashboard';
-                                @endphp
-                                <a href="{{ url($dashboardLink) }}" class="inline-flex justify-center items-center px-8 py-3.5 rounded-xl bg-slate-800 text-white font-semibold text-sm hover:bg-slate-700 transition-all shadow-lg">
-                                    <i class="fas fa-user-shield mr-2"></i> Ke Dashboard Pegawai
-                                </a>
-                            @endif
-                        </div>
-                        <div class="mt-2 text-sm text-slate-500 font-medium">
-                            Anda sedang login sebagai <span class="text-slate-800 font-bold">{{ Auth::user()->name }}</span>
-                        </div>
-                        @endif
+                        @endguest
                     </div>
 
                     <!-- Right Column: Slider Card -->

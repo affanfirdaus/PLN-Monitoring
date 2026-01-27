@@ -25,6 +25,7 @@ class UnitTePanelProvider extends PanelProvider
         return $panel
             ->id('unit-te')
             ->path('internal/unit-te')
+            ->authGuard('web')
             ->colors([
                 'primary' => Color::Purple,
             ])

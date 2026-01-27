@@ -25,6 +25,7 @@ class UnitPerencanaanPanelProvider extends PanelProvider
         return $panel
             ->id('unit-perencanaan')
             ->path('internal/unit-perencanaan')
+            ->authGuard('web')
             ->colors([
                 'primary' => Color::Yellow,
             ])

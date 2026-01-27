@@ -16,7 +16,6 @@ class PermohonanLayananResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $navigationLabel = 'Permohonan Layanan';
-    protected static ?string $navigationGroup = 'Layanan pelanggan';
     protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form

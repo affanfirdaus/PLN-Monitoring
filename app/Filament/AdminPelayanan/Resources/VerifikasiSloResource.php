@@ -17,7 +17,6 @@ class VerifikasiSloResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-check-circle';
     protected static ?string $navigationLabel = 'Verifikasi SLO';
-    protected static ?string $navigationGroup = 'Verifikasi & Validasi';
     protected static ?int $navigationSort = 4;
 
     // Optional: Filter only records needing SLO verification
