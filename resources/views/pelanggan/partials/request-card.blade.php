@@ -1,19 +1,35 @@
 @props(['req'])
 
 @php
-    $isDraft = $req->status === 'DRAFT';
-    $statusLabel = $isDraft ? 'Menunggu Diselesaikan' : 'Diajukan / Menunggu Verifikasi';
+    $isDraft = $req->isDraft();
+    $isCancelled = $req->cancelled_at !== null;
     
-    $statusClasses = $isDraft 
-        ? 'bg-yellow-50 text-yellow-700 border-yellow-200' 
-        : 'bg-blue-50 text-[#2F5AA8] border-blue-200';
+    if ($isCancelled) {
+        $statusLabel = 'Dibatalkan';
+        $statusClasses = 'bg-red-50 text-red-700 border-red-200';
+        $statusIcon = 'x-circle';
+    } else {
+        $statusLabel = $req->status->getLabel();
+        $statusClasses = $isDraft 
+            ? 'bg-yellow-50 text-yellow-700 border-yellow-200' 
+            : 'bg-blue-50 text-[#2F5AA8] border-blue-200';
+        
+        // Determine icon based on status
+        if ($isDraft) {
+            $statusIcon = 'pencil';
+        } elseif ($req->status === App\Enums\PermohonanStatus::MENUNGGU_PEMBAYARAN) {
+            $statusIcon = 'credit-card';
+        } else {
+            $statusIcon = 'clock';
+        }
+    }
     
-    // Icon
-    $statusIcon = $isDraft ? 'fa-edit' : 'fa-clock';
-    
-    // Date
-    $displayDate = $isDraft ? ($req->last_saved_at ?? $req->updated_at) : $req->submitted_at;
-    $dateLabel = $isDraft ? 'Terakhir disimpan:' : 'Tanggal Submit:';
+    $displayDate = $isCancelled 
+        ? $req->cancelled_at 
+        : ($isDraft ? ($req->last_saved_at ?? $req->updated_at) : $req->submitted_at);
+    $dateLabel = $isCancelled 
+        ? 'Dibatalkan pada:' 
+        : ($isDraft ? 'Terakhir disimpan:' : 'Tanggal Submit:');
 @endphp
 
 <div class="bg-white rounded-xl border {{ $isDraft ? 'border-yellow-200' : 'border-slate-200' }} p-6 shadow-sm hover:shadow-md transition group relative overflow-hidden">
@@ -27,7 +43,28 @@
         <div class="flex flex-col gap-2">
             <div class="flex items-center gap-3 mb-1">
                 <span class="px-3 py-1 rounded-full text-xs font-bold border flex items-center gap-2 {{ $statusClasses }}">
-                    <i class="fas {{ $statusIcon }}"></i>
+                    {{-- Static SVG Icons --}}
+                    @if($statusIcon === 'pencil')
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M16.862 3.487a2.5 2.5 0 0 1 3.536 3.536L7.5 19.92l-4.5 1 1-4.5L16.862 3.487Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    @elseif($statusIcon === 'credit-card')
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M3 7h18v10H3V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M7 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    @elseif($statusIcon === 'clock')
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M12 8v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    @elseif($statusIcon === 'x-circle')
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M9 9l6 6m0-6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    @endif
                     {{ $statusLabel }}
                 </span>
                 <span class="text-xs text-slate-400 font-medium font-mono">
@@ -77,9 +114,13 @@
                     <a href="{{ route('tambah-daya.resume', $req->id) }}" class="px-5 py-2.5 bg-[#2F5AA8] text-white font-bold rounded-lg hover:bg-[#274C8E] transition shadow-lg shadow-blue-900/20 text-sm flex items-center gap-2">
                         Lanjutkan <i class="fas fa-arrow-right"></i>
                     </a>
-                @else
+                @elseif($isCancelled)
                     <a href="{{ route('monitoring.show', $req->id) }}" class="px-5 py-2.5 bg-slate-100 text-slate-600 font-bold rounded-lg hover:bg-slate-200 transition border border-slate-200 text-sm">
-                        Detail Permohonan
+                        Lihat Detail
+                    </a>
+                @else
+                    <a href="{{ route('monitoring.show', $req->id) }}" class="px-5 py-2.5 bg-[#2F5AA8] text-white font-bold rounded-lg hover:bg-[#274C8E] transition shadow-lg text-sm">
+                        Lihat Tracking
                     </a>
                 @endif
             </div>

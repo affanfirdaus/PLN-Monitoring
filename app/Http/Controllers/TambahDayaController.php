@@ -11,6 +11,7 @@ use App\Models\ApplicantIdentity;
 use App\Models\ServiceRequest;
 use App\Models\PelangganProfile;
 use App\Models\MasterSlo;
+use App\Enums\PermohonanStatus;
 
 class TambahDayaController extends Controller
 {
@@ -33,30 +34,28 @@ class TambahDayaController extends Controller
     }
 
     /**
-     * RESUME DRAFT
-     */
-    public function resume($id)
-    {
-        $sr = ServiceRequest::where('id', $id)
-            ->where('submitter_user_id', Auth::id())
-            ->where('status', 'DRAFT')
-            ->firstOrFail();
+ * RESUME DRAFT
+ */
+public function resume($id)
+{
+    $sr = ServiceRequest::where('id', $id)
+        ->where('submitter_user_id', Auth::id())
+        ->where('is_draft', true)
+        ->firstOrFail();
 
-        // Load payload to session
-        if ($sr->payload_json) {
-            Session::put('tambah_daya', $sr->payload_json);
-        } else {
-             // Fallback if payload empty but record exists
-            $wizard = $this->getWizardSession();
-            $wizard['service_request_id'] = $sr->id;
-            Session::put('tambah_daya', $wizard);
-        }
+    // Store draft ID in session for subsequent steps
+    session(['td_draft_id' => $sr->id]);
 
-        // Determinta target step
-        $step = $sr->current_step ?? 1;
-        
-        return redirect()->route('tambah-daya.step' . $step);
+    // Load payload to session (if using payload_json approach)
+    if ($sr->payload_json) {
+        Session::put('tambah_daya', $sr->payload_json);
     }
+
+    // Redirect to next step after last saved step
+    $nextStep = min(($sr->last_step ?? 0) + 1, 5);
+    
+    return redirect()->route('tambah-daya.step' . $nextStep);
+}
 
     /**
      * CANCEL / DELETE DRAFT
@@ -806,9 +805,11 @@ class TambahDayaController extends Controller
                 $nomorPermohonan = 'REQ-' . date('Ymd') . '-' . str_pad($sr->id, 5, '0', STR_PAD_LEFT);
                 $sr->update([
                     'applicant_id' => $applicant->id, 
-                    'status' => 'SUBMITTED', 
+                    'status' => PermohonanStatus::DITERIMA_PLN, // Start from step 1 of tracking
+                    'is_draft' => false, // No longer a draft
                     'nomor_permohonan' => $nomorPermohonan,
                     'submitted_at' => now(),
+                    'last_step' => 5, // Completed all wizard steps
                     'payload_json' => null, // Optional: Clear draft payload
                 ]);
             }

@@ -2,18 +2,84 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto py-10">
-    <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-           <a href="{{ route('monitoring') }}" class="text-slate-500 hover:text-slate-800 font-semibold mb-2 inline-block">
-                <i class="fas fa-arrow-left mr-2"></i> Kembali
-            </a>
-            <h1 class="text-2xl font-bold text-slate-900">Detail Permohonan</h1>
-            <p class="text-slate-500 text-sm">No: {{ $req->nomor_permohonan }}</p>
-        </div>
-        <span class="px-4 py-2 rounded-full border bg-blue-50 text-[#2F5AA8] border-blue-200 font-bold text-sm">
-            {{ $req->status === 'SUBMITTED' ? 'Diajukan' : $req->status }}
+    {{-- Back Button --}}
+    <a href="{{ route('monitoring') }}" class="inline-flex items-center gap-2 text-slate-600 hover:text-slate-800 mb-6 font-medium">
+        <i class="fas fa-arrow-left"></i> Kembali ke Monitoring
+    </a>
+
+    {{-- Status Badge --}}
+    <div class="mb-6">
+        <span class="px-4 py-2 rounded-full text-sm font-bold border inline-flex items-center gap-2
+                     {{ $req->isDraft() ? 'bg-yellow-50 text-yellow-700 border-yellow-200' : '' }}
+                     {{ $req->isProcessing() ? 'bg-blue-50 text-[#2F5AA8] border-blue-200' : '' }}
+                     {{ $req->isDone() ? 'bg-green-50 text-green-700 border-green-200' : '' }}">
+            {{-- Static SVG Icon --}}
+            @if($req->isDraft())
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M16.862 3.487a2.5 2.5 0 0 1 3.536 3.536L7.5 19.92l-4.5 1 1-4.5L16.862 3.487Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            @elseif($req->isProcessing())
+                @if($req->status === App\Enums\PermohonanStatus::MENUNGGU_PEMBAYARAN)
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M3 7h18v10H3V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M7 14h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                @else
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M12 8v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                @endif
+            @else
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            @endif
+            {{ $req->status->getLabel() }}
         </span>
     </div>
+
+    {{-- Payment CTA (if applicable) --}}
+    @if($showPaymentCTA)
+        <div class="mb-6 p-6 bg-amber-50 border border-amber-200 rounded-xl">
+            <div class="flex items-start gap-4">
+                <i class="fas fa-exclamation-circle text-2xl text-amber-600 mt-1"></i>
+                <div class="flex-1">
+                    <h3 class="font-bold text-amber-900 mb-1">Pembayaran Diperlukan</h3>
+                    <p class="text-amber-700 text-sm mb-3">Permohonan Anda sedang menunggu pembayaran. Silakan selesaikan pembayaran untuk melanjutkan proses.</p>
+                    <button disabled class="px-6 py-3 bg-amber-400 text-amber-900 font-bold rounded-lg cursor-not-allowed opacity-50">
+                        <i class="fas fa-credit-card mr-2"></i> Bayar Sekarang (Segera Hadir)
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Stepper (only for processing/completed requests) --}}
+    @if($shouldShowStepper && $currentStepIndex !== null)
+        <x-monitoring.stepper :steps="$steps" :currentIndex="$currentStepIndex" />
+        <div class="h-6"></div>
+    @endif
+
+    {{-- Cancellation Notice (if cancelled) --}}
+    @if($req->cancelled_at)
+        <div class="mb-6 p-6 bg-red-50 border border-red-200 rounded-xl">
+            <div class="flex items-start gap-4">
+                <i class="fas fa-times-circle text-2xl text-red-600 mt-1"></i>
+                <div class="flex-1">
+                    <h3 class="font-bold text-red-900 mb-1">Permohonan Dibatalkan</h3>
+                    <p class="text-red-700 text-sm mb-2">Permohonan ini telah dibatalkan oleh admin pada {{ $req->cancelled_at->translatedFormat('d F Y, H:i') }}</p>
+                    @if($req->cancellation_reason)
+                        <div class="mt-3 p-3 bg-white rounded border border-red-200">
+                            <p class="text-sm text-slate-700"><strong>Alasan:</strong> {{ $req->cancellation_reason }}</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- Data Sections -->
     <div class="space-y-6">
