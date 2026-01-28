@@ -106,4 +106,49 @@ enum PermohonanStatus: string
             'Selesai',
         ];
     }
+
+    /**
+     * Get allowed details for this status
+     */
+    public function allowedDetails(): array
+    {
+        return match($this) {
+            self::DITERIMA_PLN => [], // Transisi awal, belum ada detail
+            self::VERIFIKASI_SLO => [
+                PermohonanDetailStatus::MENUNGGU_VERIFIKASI,
+                PermohonanDetailStatus::SLO_VALID,
+                PermohonanDetailStatus::DOKUMEN_TIDAK_VALID,
+                PermohonanDetailStatus::DITERUSKAN_KE_SURVEY,
+            ],
+            self::SURVEY_LAPANGAN => [
+                PermohonanDetailStatus::SURVEY_BARU,
+                PermohonanDetailStatus::SURVEY_DIJADWALKAN,
+                PermohonanDetailStatus::SURVEY_SELESAI,
+            ],
+            self::PERENCANAAN_MATERIAL => [
+                PermohonanDetailStatus::MATERIAL_ANALISA,
+                PermohonanDetailStatus::MATERIAL_TERSEDIA,
+                PermohonanDetailStatus::MATERIAL_MENUNGGU,
+            ],
+            self::MENUNGGU_PEMBAYARAN => [
+                PermohonanDetailStatus::TAGIHAN_TERBIT,
+                PermohonanDetailStatus::PEMBAYARAN_SELESAI,
+            ],
+            self::KONSTRUKSI_INSTALASI => [
+                PermohonanDetailStatus::KONSTRUKSI_JARINGAN,
+                PermohonanDetailStatus::INSTALASI_PELANGGAN,
+                PermohonanDetailStatus::KONSTRUKSI_PROGRESS,
+            ],
+            self::PENYALAAN_TE => [
+                PermohonanDetailStatus::PENYALAAN_BERHASIL,
+                PermohonanDetailStatus::KONFIRMASI_NYALA,
+            ],
+            self::SELESAI => [
+                PermohonanDetailStatus::ADMINISTRASI_AKHIR,
+                PermohonanDetailStatus::FINISH,
+                PermohonanDetailStatus::CLOSE,
+            ],
+            default => [],
+        };
+    }
 }

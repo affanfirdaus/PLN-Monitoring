@@ -9,7 +9,9 @@
         $statusClasses = 'bg-red-50 text-red-700 border-red-200';
         $statusIcon = 'x-circle';
     } else {
-        $statusLabel = $req->status->getLabel();
+        $mainStatus = $req->status->getLabel();
+        $detailStatus = $req->status_detail?->getLabel();
+        $statusLabel = $detailStatus ? "{$mainStatus} ; {$detailStatus}" : $mainStatus;
         $statusClasses = $isDraft 
             ? 'bg-yellow-50 text-yellow-700 border-yellow-200' 
             : 'bg-blue-50 text-[#2F5AA8] border-blue-200';
