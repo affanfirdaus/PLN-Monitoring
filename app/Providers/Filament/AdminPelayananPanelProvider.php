@@ -31,6 +31,7 @@ class AdminPelayananPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::hex('#0B5ED7'),
             ])
+            ->darkMode(false)
             ->brandName('Sistem Monitoring PLN')
             ->brandLogo(asset('images/pln-logo2.png'))
             ->brandLogoHeight('2.5rem')

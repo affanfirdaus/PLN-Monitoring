@@ -7,7 +7,6 @@ export default defineConfig({
             input: [
                 "resources/css/app.css",
                 "resources/js/app.js",
-                // HAPUS INI BIAR NGGAK KEBUILD:
                 // "resources/css/filament/admin-pelayanan/theme.css"
             ],
             refresh: true,

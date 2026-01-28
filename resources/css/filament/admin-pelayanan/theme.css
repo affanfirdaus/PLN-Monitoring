@@ -1,4 +1,4 @@
-@import "../../../../vendor/filament/filament/resources/css/theme.css";
+@import "tailwindcss";
 
 /* token */
 :root{
@@ -89,3 +89,12 @@
 .fi-main-ctn {
   padding-top: 18px !important;
 }
+
+/* PAGINATION OVERRIDE */
+.fi-pagination-overview {
+    color: #000 !important;
+}
+.dark .fi-pagination-overview {
+    color: #e5e7eb !important;
+}
+

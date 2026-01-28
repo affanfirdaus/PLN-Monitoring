@@ -590,7 +590,7 @@ body.fi-panel-admin-pelayanan .fi-ta th {
 body.fi-panel-admin-pelayanan .fi-ta tbody,
 body.fi-panel-admin-pelayanan .fi-ta tbody tr,
 body.fi-panel-admin-pelayanan .fi-ta td {
-  background: #ffffff !important;
+  background: #eaf5f8 !important;
   color: #0f172a !important;
 }
 
@@ -810,7 +810,7 @@ body.fi-panel-admin-pelayanan .fi-ta-header-cell {
 .fi-panel-admin-pelayanan .fi-ta-row,
 .fi-panel-admin-pelayanan .fi-table tbody tr,
 body.fi-panel-admin-pelayanan .fi-ta-row {
-  background: #ffffff !important;
+  background: #eaf5f8 !important;
   transition: background 0.15s ease !important;
   color: #0f172a !important;
 }
@@ -1043,7 +1043,7 @@ body.fi-panel-admin-pelayanan .fi-ta th * {
 body.fi-panel-admin-pelayanan .fi-ta tbody tr,
 body.fi-panel-admin-pelayanan .fi-ta td,
 body.fi-panel-admin-pelayanan .fi-ta td * {
-  background: #ffffff !important;
+  background: #eaf5f8 !important;
   color: #0f172a !important;
   opacity: 1 !important;
 }
@@ -1097,7 +1097,7 @@ body.fi-panel-admin-pelayanan .fi-ta th * {
 body.fi-panel-admin-pelayanan .fi-ta tbody tr,
 body.fi-panel-admin-pelayanan .fi-ta td,
 body.fi-panel-admin-pelayanan .fi-ta td * {
-  background: #ffffff !important;
+  background: #eaf5f8 !important;
   color: #0f172a !important;
   opacity: 1 !important;
 }
@@ -1137,3 +1137,61 @@ body.fi-panel-admin-pelayanan .pln-custom-topbar svg {
   fill: currentColor !important;
   stroke: currentColor !important;
 }
+
+/* FINAL: force table body fully #eaf5f8 (no white cells) */
+body.fi-panel-admin-pelayanan .fi-ta,
+body.fi-panel-admin-pelayanan .fi-ta-ctn,
+body.fi-panel-admin-pelayanan .fi-ta table,
+body.fi-panel-admin-pelayanan .fi-ta thead,
+body.fi-panel-admin-pelayanan .fi-ta tbody,
+body.fi-panel-admin-pelayanan .fi-ta tr,
+body.fi-panel-admin-pelayanan .fi-ta th,
+body.fi-panel-admin-pelayanan .fi-ta td,
+body.fi-panel-admin-pelayanan .fi-ta .fi-ta-cell,
+body.fi-panel-admin-pelayanan .fi-ta .fi-ta-text,
+body.fi-panel-admin-pelayanan .fi-ta [class*="bg-white"],
+body.fi-panel-admin-pelayanan .fi-ta [style*="background: rgb(255, 255, 255)"],
+body.fi-panel-admin-pelayanan .fi-ta [style*="background-color: rgb(255, 255, 255)"] {
+  background-color: #eaf5f8 !important;
+  background: #eaf5f8 !important;
+}
+
+body.fi-panel-admin-pelayanan .fi-ta tbody tr:hover,
+body.fi-panel-admin-pelayanan .fi-ta tbody tr:hover td {
+  background-color: #eaf5f8 !important;
+  background: #eaf5f8 !important;
+}
+
+/* HOTFIX: Pagination overview color should be BLACK in light mode */
+html:not(.dark) .fi-pagination-overview{
+  color: #000 !important;
+  opacity: 1 !important;
+}
+
+/* keep dark mode readable */
+html.dark .fi-pagination-overview{
+  color: #e5e7eb !important;
+  opacity: 1 !important;
+}
+
+html:not(.dark) .fi-ta-content nav[aria-label="Pagination navigation"] .fi-pagination-overview{
+  color:#000 !important;
+}
+html.dark .fi-ta-content nav[aria-label="Pagination navigation"] .fi-pagination-overview{
+  color:#e5e7eb !important;
+}
+
+/* FIX: walau html lagi class="dark", pagination overview tetap hitam di panel admin-pelayanan */
+html.dark body.fi-panel-admin-pelayanan .fi-pagination-overview{
+  color: #000 !important;
+  opacity: 1 !important;
+}
+
+/* kalau mau: text abu-abu kecil lain di tabel juga ikut kebaca */
+html.dark body.fi-panel-admin-pelayanan .fi-ta .text-gray-500,
+html.dark body.fi-panel-admin-pelayanan .fi-ta .text-gray-400{
+  color:#475569 !important;
+  opacity: 1 !important;
+}
+
+

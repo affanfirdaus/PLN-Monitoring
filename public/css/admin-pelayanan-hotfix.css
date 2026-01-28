@@ -1,0 +1,7 @@
+.fi-pagination-overview{
+  color:#000 !important;
+  opacity:1 !important;
+}
+.dark .fi-pagination-overview{
+  color:#e5e7eb !important;
+}
