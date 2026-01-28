@@ -22,8 +22,11 @@ class PermohonanLayananResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('no_registrasi')->required(),
-                Forms\Components\TextInput::make('layanan_type')->required(),
+                Forms\Components\TextInput::make('nomor_permohonan')->disabled(),
+                Forms\Components\TextInput::make('jenis_layanan')->disabled(),
+                Forms\Components\Select::make('status')
+                    ->options(\App\Enums\PermohonanStatus::class)
+                    ->required(),
             ]);
     }
 
@@ -31,10 +34,24 @@ class PermohonanLayananResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('no_registrasi')->searchable(),
-                Tables\Columns\TextColumn::make('layanan_type'),
-                Tables\Columns\TextColumn::make('status')->badge(),
+                Tables\Columns\TextColumn::make('nomor_permohonan')
+                    ->label('No Permohonan')
+                    ->searchable()
+                    ->copyable(),
+                Tables\Columns\TextColumn::make('applicant.nama_lengkap')
+                    ->label('Pemohon')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('jenis_layanan')
+                    ->label('Layanan')
+                    ->badge(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Tanggal')
+                    ->dateTime()
+                    ->sortable(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 //
             ])

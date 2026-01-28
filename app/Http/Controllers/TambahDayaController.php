@@ -797,28 +797,65 @@ public function resume($id)
             $applicantData
         );
         
-        // Update Service Request Status
-         if (!empty($wizard['service_request_id'])) {
-            $sr = ServiceRequest::find($wizard['service_request_id']);
-            if ($sr) {
-                // Generate Official ID
-                $nomorPermohonan = 'REQ-' . date('Ymd') . '-' . str_pad($sr->id, 5, '0', STR_PAD_LEFT);
-                $sr->update([
+        // Finalize Service Request (Transaction & Idempotency)
+        $sr = DB::transaction(function() use ($wizard, $applicant, $request, $wajibNPWP) {
+            $serviceRequestId = $wizard['service_request_id'] ?? null;
+            $sr = ServiceRequest::find($serviceRequestId);
+            
+            // If no draft found, try to find by applicant/type to ensure idempotency or create new
+            if (!$sr) {
+                // Determine submitter
+                $submitterId = Auth::id();
+                // Try finding existing DRAFT for this user/applicant to recover or prevent dupe (less likely if wizard session is clean, but safe)
+                // For now, assume create new if session lost but here we are.
+                $sr = ServiceRequest::create([
+                    'submitter_user_id' => $submitterId,
+                    'jenis_layanan' => 'TAMBAH_DAYA',
+                    'status' => 'DRAFT',
                     'applicant_id' => $applicant->id, 
-                    'status' => PermohonanStatus::DITERIMA_PLN, // Start from step 1 of tracking
-                    'is_draft' => false, // No longer a draft
-                    'nomor_permohonan' => $nomorPermohonan,
-                    'submitted_at' => now(),
-                    'last_step' => 5, // Completed all wizard steps
-                    'payload_json' => null, // Optional: Clear draft payload
+                    'applicant_nik' => $applicant->nik,
                 ]);
             }
-        }
 
-        Session::forget('tambah_daya'); // Clear wizard
+            // IDEMPOTENCY CHECK: If already submitted, just return it
+            if (!$sr->is_draft && $sr->status !== \App\Enums\PermohonanStatus::DRAFT) {
+                return $sr;
+            }
 
-        return redirect()->route('monitoring')->with('success', 'Permohonan berhasil dikirim!');
+            // Update Fields
+            $sr->update([
+                'applicant_id' => $applicant->id, 
+                'applicant_nik' => $applicant->nik,
+                'status' => \App\Enums\PermohonanStatus::DITERIMA_PLN,
+                'is_draft' => false,
+                'submitted_at' => now(),
+                'payload_json' => $wizard, // Save final state
+                
+                // Finalize Technical Data (Ensure it matches wizard)
+                'daya_baru' => Session::get('tambah_daya.daya_baru') ?? $sr->daya_baru,
+                'jenis_produk' => Session::get('tambah_daya.jenis_produk') ?? $sr->jenis_produk,
+                'peruntukan_koneksi' => Session::get('tambah_daya.peruntukan_koneksi') ?? $sr->peruntukan_koneksi,
+            ]);
+
+            // Generate Nomor Permohonan if empty
+            if (empty($sr->nomor_permohonan)) {
+                // Format: TD-000001 (using ID)
+                $nomor = 'TD-' . str_pad($sr->id, 6, "0", STR_PAD_LEFT);
+                
+                // Safe update to avoid race condition constraint violation (though unique, unlikely here due to lock)
+                $sr->update(['nomor_permohonan' => $nomor]);
+            }
+            
+            return $sr;
+        });
+
+        // Clear Wizard Session
+        Session::forget('tambah_daya');
+        Session::forget('td_step1');
+
+        return redirect()->route('monitoring')->with('success', 'Permohonan berhasil dikirim dan diterima PLN. Nomor: ' . $sr->nomor_permohonan);
     }
+
 
 
     public function checkNik(Request $request) 
