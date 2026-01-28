@@ -22,18 +22,30 @@ class PermohonanLayananResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('nomor_permohonan')->disabled(),
-                Forms\Components\TextInput::make('jenis_layanan')->disabled(),
-                Forms\Components\Select::make('status')
-                    ->options(\App\Enums\PermohonanStatus::class)
-                    ->required(),
+                Forms\Components\TextInput::make('nomor_permohonan')
+                    ->disabled()
+                    ->dehydrated(false),
+                    
+                Forms\Components\TextInput::make('jenis_layanan')
+                    ->disabled()
+                    ->dehydrated(false),
+
+                Forms\Components\Placeholder::make('status_label')
+                    ->label('Status Saat Ini')
+                    ->content(fn ($record) => $record?->status?->getLabel() ?? '-'),
+                
+                Forms\Components\Placeholder::make('status_detail_label')
+                    ->label('Status Detail')
+                    ->content(fn ($record) => $record?->status_detail?->getLabel() ?? '-'),
+
+                // Additional read-only fields for context would go here
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
-            ->searchable(false)
+            ->recordUrl(null) // Disable click to edit
             ->columns([
                 Tables\Columns\TextColumn::make('nomor_permohonan')
                     ->label('No Permohonan')
@@ -47,6 +59,9 @@ class PermohonanLayananResource extends Resource
                     ->badge(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
+                Tables\Columns\TextColumn::make('status_detail')
+                    ->label('Detail')
+                    ->badge(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tanggal')
                     ->dateTime()
@@ -57,7 +72,11 @@ class PermohonanLayananResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Custom action to open the workflow page (which is technically the Edit page)
+                Tables\Actions\Action::make('proses')
+                    ->label('Proses / Detail')
+                    ->icon('heroicon-o-arrow-right-circle')
+                    ->url(fn (ServiceRequest $record) => Pages\EditPermohonanLayanan::getUrl(['record' => $record])),
             ]);
     }
 
