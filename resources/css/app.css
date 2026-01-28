@@ -33,3 +33,11 @@
 .animate-fade-in-down {
     animation: fadeInDown 0.3s ease-out both;
 }
+
+/* PAGINATION OVERRIDE */
+.fi-pagination-overview {
+    color: #000 !important;
+}
+.dark .fi-pagination-overview {
+    color: #e5e7eb !important;
+}

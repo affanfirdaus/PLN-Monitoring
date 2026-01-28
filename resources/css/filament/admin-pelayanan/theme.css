@@ -1,4 +1,4 @@
-@import "../../../../vendor/filament/filament/resources/css/theme.css";
+@import "tailwindcss";
 
 /* token */
 :root{
@@ -90,48 +90,11 @@
   padding-top: 18px !important;
 }
 
-/* =========================================================
-   SCOPE: Permohonan Layanan list only
-   URL: /internal/admin-pelayanan/permohonan-layanans
-   FIX: remove remaining white blocks inside table cells/actions
-   ========================================================= */
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) {
-  --permohonan-bg: #eaf5f8;
-  --permohonan-text: #0f172a;
-  --permohonan-border: rgba(12, 74, 110, .12);
+/* PAGINATION OVERRIDE */
+.fi-pagination-overview {
+    color: #000 !important;
+}
+.dark .fi-pagination-overview {
+    color: #e5e7eb !important;
 }
 
-/* make ALL table internal surfaces follow bg */
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta-header,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta-content,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta-footer,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta-table,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta-row,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta-cell,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta-cell-wrp,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta-col-wrp,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta-text,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta-actions,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta-actions-cell,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta-actions-cell-wrp,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-pagination,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta-records-summary {
-  background-color: var(--permohonan-bg) !important;
-  border-color: var(--permohonan-border) !important;
-  color: var(--permohonan-text) !important;
-}
-
-/* if action buttons/links still show white background */
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-btn,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-icon-btn,
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) a.fi-link {
-  background-color: var(--permohonan-bg) !important;
-  border-color: var(--permohonan-border) !important;
-  color: var(--permohonan-text) !important;
-}
-
-/* ensure text readable */
-body:has(.fi-sidebar a[href*="permohonan-layanans"][aria-current="page"]) .fi-ta * {
-  color: var(--permohonan-text);
-}
