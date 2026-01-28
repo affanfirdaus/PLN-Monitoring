@@ -33,6 +33,7 @@ class PermohonanLayananResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->searchable(false)
             ->columns([
                 Tables\Columns\TextColumn::make('nomor_permohonan')
                     ->label('No Permohonan')
